@@ -4,7 +4,6 @@ import App from './App.vue'
 import '/src/style.css'
 import 'pretendard/dist/web/static/pretendard-dynamic-subset.css';
 
-
 const app = createApp(App);
 app.use(router);
 app.mount('#app');
