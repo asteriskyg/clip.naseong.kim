@@ -6,7 +6,7 @@
           <img :src="me.profileImageUrl" class="w-10 h-10 rounded-full border-2" alt="">
         </div>
         <a v-if="!loginStatus"
-           href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=https://naseong.kim/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail"
+           :href= "`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=https://${VITE_DOMAIN}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail`"
            class="py-2 px-4 rounded-full text-white bg-[#9146ff]"
         >로그인</a>
 
@@ -24,6 +24,7 @@ import axios from 'axios';
 
 const loginStatus = ref(true)
 const me:any = ref()
+const VITE_DOMAIN = import.meta.env.VITE_DOMAIN
 
 onMounted(async () => {
   const auth = useAuth();
