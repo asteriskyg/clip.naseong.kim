@@ -30,10 +30,10 @@ const routes: RouteRecordRaw[] = [
   //   path:'/list',
   //   component: () => import('/src/list.vue')
   // },
-  // {
-  //   path:'/detail/:id',
-  //   component: () => import('/src/detail.vue')
-  // },
+  {
+    path:'/detail/:id',
+    component: () => import('/src/detail.vue')
+  },
   // {
   //   path:'/create-image',
   //   component: () => import('/src/createImage.vue')
