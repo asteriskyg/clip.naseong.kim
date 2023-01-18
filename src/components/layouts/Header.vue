@@ -1,13 +1,12 @@
 <template>
-  <div class="sticky w-full top-0 bg-gray-100/50 backdrop-blur-lg border-b z-10">
+  <div class="sticky w-full top-0 bg-slate-100/50 backdrop-blur-lg border-b z-10">
     <div class="w-full px-6 py-6 max-w-7xl m-auto">
       <div class="flex justify-between items-center">
-        <div class="flex gap-6 items-center">
+        <div class="flex gap-4 items-center">
           <a href="/" class="flex text-3xl">
             <div>naseong.kim</div>
           </a>
           <button v-if="streamInfo" @click="toggleLive" class="text-sm px-4 py-1 bg-red-500 shadow-lg shadow-red-600 text-white rounded-full select-none">LIVE</button>
-          <!-- <div id="autocomplete" class="hidden"></div> -->
         </div>
         <div v-if="me">
           <Menu>
@@ -73,10 +72,11 @@
           <a href="https://twitch.tv/naseongkim" target="_blank" id="broadcast-button" class="w-full text-base bg-blue-100 mt-4 p-3 rounded-2xl text-center cursor-pointer transition-all no-underline duration-300 hover:shadow-lg hover:shadow-blue-400">방송 바로가기
           </a>
         </div>
-        <div class="absolute top-6 right-6">
-
-        </div>
       </div>
+    </div>
+    <div class="flex flex-wrap gap-2 justify-center p-3 border-t bg-slate-50/30">
+      <div>베타 테스트 중 입니다.</div>
+      <div>버그를 발견했다면 웃으세요 :)</div>
     </div>
   </div>
 </template>
@@ -157,7 +157,6 @@ async function logout() {
 
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
-
   window.location.reload();
 }
 </script>
