@@ -20,8 +20,29 @@
                   <div class="text-sm">로그인 된 계정</div>
                   <div class="text-lg font-semibold">{{ me.displayName }}</div>
                 </div>
+                <div class="px-4 py-2 bg-slate-100 text-slate-500 border-b">
+                  <div>바로가기</div>
+                </div>
                 <MenuItem v-slot="{ active }">
-                  <button @click="logout" class="transition-all duration-300 px-5 py-3" :class='{ "bg-blue-100": active }'>
+                  <a href="https://tgd.kr/s/naseongkim" target="_blank" class="transition-all duration-300 px-5 py-3 text-left text-[#6441A5]" :class='{ "bg-[#6441A5]/20": active }'>
+                    트게더
+                  </a>
+                </MenuItem>
+                <MenuItem v-slot="{ active }">
+                  <a href="https://www.twitch.tv/naseongkim" target="_blank" class="transition-all duration-300 px-5 py-3 text-left text-[#9146ff]" :class='{ "bg-[#9146ff]/20": active }'>
+                    트위치
+                  </a>
+                </MenuItem>
+                <MenuItem v-slot="{ active }">
+                  <a href="https://www.youtube.com/@Naseongkim" target="_blank" class="transition-all duration-300 px-5 py-3 text-left border-b text-[#FF0000]" :class='{ "bg-[#FF0000]/20": active }'>
+                    유튜브
+                  </a>
+                </MenuItem>
+                <div class="px-4 py-2 bg-slate-100 text-slate-500 border-b">
+                  <div>설정</div>
+                </div>
+                <MenuItem v-slot="{ active }">
+                  <button @click="logout" class="transition-all duration-300 px-5 py-3 text-left" :class='{ "bg-blue-100": active }'>
                     로그아웃
                   </button>
                 </MenuItem>
