@@ -92,14 +92,14 @@ import 'dayjs/locale/ko'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
-interface me {
+interface Me {
   displayName: string;
   email: string;
   profileImageUrl: string;
   twitchUserId: number;
 }
 
-interface streamInfo {
+interface StreamInfo {
   id: number;
   user_id: number;
   user_login: string;
@@ -122,9 +122,9 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const auth = useAuthStore()
 const loginStatus = ref(true);
-const me = ref<me>();
+const me = ref<Me>();
 const modal = ref(false);
-const streamInfo = ref<streamInfo>();
+const streamInfo = ref<StreamInfo>();
 
 onMounted(async () => {
   const authority = await auth.checkAuthority();
@@ -136,8 +136,8 @@ onMounted(async () => {
   const whoami = await auth.whoami();
   me.value = whoami;
 
-  const getstreamInfo = await auth.getStreamInfo();
-  streamInfo.value = getstreamInfo;
+  const getStreamInfo = await auth.getStreamInfo();
+  streamInfo.value = getStreamInfo;
 });
 
 function toggleLive() {
@@ -146,16 +146,18 @@ function toggleLive() {
 
 async function logout() {
   const accessToken = localStorage.getItem('access_token');
+  const refreshToken = localStorage.getItem('refresh_token');
 
   await axios.get(`${VITE_API_URL}/logout`, {
     headers: {
-      Authorization: `Bearer ${accessToken}`
+      Authorization: `Bearer ${accessToken}`,
+      refresh: refreshToken
     }
   });
 
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
 
-  window.location.reload()
+  window.location.reload();
 }
 </script>
