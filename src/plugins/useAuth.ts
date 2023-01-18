@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const useAuth = () => {
+  const VITE_API_URL = import.meta.env.VITE_API_URL;
+
   const auth = {
     checkAuthority: async () => {
       const accessToken = localStorage.getItem('access_token');
@@ -9,7 +11,7 @@ export const useAuth = () => {
       }
 
       try {
-        const response = await axios.get('https://api.naseong.kim/access', {
+        const response = await axios.get(`${VITE_API_URL}/access`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           }
@@ -28,14 +30,13 @@ export const useAuth = () => {
           return false
         }
 
-        const response = await axios.get('https://api.naseong.kim/refresh', {
+        const response = await axios.get(`${VITE_API_URL}/refresh`, {
           headers: {
             Authorization: `Bearer ${refreshToken}`,
           }
         });
 
         localStorage.setItem('access_token', response.data.access_token)
-        localStorage.setItem('refresh_token', response.data.refresh_token)
 
         return true
       } catch {

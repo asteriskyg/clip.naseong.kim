@@ -8,23 +8,23 @@
 import axios from 'axios'
 import { onMounted } from 'vue'
 import { router } from './router';
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   const queries = window.location.search
   const params = new URLSearchParams(queries)
   const code = params.get('code') as string
 
-  const token = await axios.get('https://api.naseong.kim/authorization', {
+  const token = await axios.get(`${VITE_API_URL}/authorization`, {
     headers: {
       code: code,
     }
   })
 
-  console.log(token.data)
-
   localStorage.setItem('access_token', token.data.access_token);
   localStorage.setItem('refresh_token', token.data.refresh_token);
 
-  router.push('/')
+
+  window.location.href= '/'
 })
 </script>
