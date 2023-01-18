@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6">
+  <div class="w-full max-w-7xl mx-auto p-6 mt-6">
     잠시만 기다려주세요...
   </div>
 </template>
