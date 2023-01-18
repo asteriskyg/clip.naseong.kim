@@ -15,7 +15,7 @@
       </div>
     </a>
   </div>
-  <div class="w-full flex justify-center items-center mt-6">
+  <div v-if="clipIndex <= 10" class="w-full flex justify-center items-center mt-6">
     <button class="px-6 py-3 bg-gray-200 hover:bg-blue-500 hover:text-white rounded-full transition-colors duration-300  " v-if="clipIndex <= 10" @click="loadMore">더보기</button>
   </div>
 </template>
