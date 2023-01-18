@@ -1,45 +1,70 @@
 <template>
-  <div class="min-w-full min-h-full">
-    <div class="sticky w-full top-0 bg-gray-100/50 backdrop-blur-lg border-b">
-      <div class="flex w-full h-20 px-6 max-w-7xl justify-end items-center m-auto">
-        <div v-if="me">
-          <img :src="me.profileImageUrl" class="w-10 h-10 rounded-full border-2" alt="">
-        </div>
-        <a v-if="!loginStatus"
-           :href= "`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=https://${VITE_DOMAIN}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail`"
-           class="py-2 px-4 rounded-full text-white bg-[#9146ff]"
-        >로그인</a>
-
-      </div>
-    </div>
-    <div class="w-full max-w-7xl mx-auto p-6 mt-6">
-      <div class="text-4xl font-extrabold mb-4">기능 준비중입니다.</div>
-    </div>
+  <div class="w-full max-w-7xl mx-auto p-6 mt-6">
+    <div class="text-4xl mb-4">최근 클립</div>
+    <RecentClipList/>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useAuth } from './plugins/useAuth'
-import axios from 'axios';
+import RecentClipList from './components/RecentClipList.vue'
+// import algoliasearch from 'algoliasearch/lite';
+// import { autocomplete, getAlgoliaResults, Pragma, Render, VNode } from '@algolia/autocomplete-js';
+// import '@algolia/autocomplete-theme-classic';
+// const VITE_ALGOLIA_APP_ID = import.meta.env.VITE_ALGOLIA_APP_ID;
+// const VITE_ALGOLIA_API_KEY = import.meta.env.VITE_ALGOLIA_API_KEY;
 
-const loginStatus = ref(true)
-const me:any = ref()
-const VITE_DOMAIN = import.meta.env.VITE_DOMAIN
+// const searchClient = algoliasearch(VITE_ALGOLIA_APP_ID, VITE_ALGOLIA_API_KEY)
 
-onMounted(async () => {
-  const auth = useAuth();
-  const status = await auth.checkAuthority()
-  loginStatus.value = status
-
-  if(status === true) {
-    const accessToken = localStorage.getItem('access_token');
-    const userData = await axios.get('https://api.naseong.kim/whoami', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-
-    me.value = userData.data
-  }
-})
+// onMounted(async () => {
+//   autocomplete<{ contentName: string; creatorName: string; objectID: string; }>({
+//   //   container: '#autocomplete',
+//   //   openOnFocus: true,
+//   //   getSources({ query }) {
+//   //     return [
+//   //       {
+//   //         sourceId: 'products',
+//   //         getItems() {
+//   //           return getAlgoliaResults({
+//   //             searchClient,
+//   //             queries: [
+//   //               {
+//   //                 indexName: 'contents',
+//   //                 query,
+//   //                 params: {
+//   //                   hitsPerPage: 10,
+//   //                   attributesToSnippet: ['contentName:10'],
+//   //                   snippetEllipsisText: '…',
+//   //                 },
+//   //               },
+//   //             ],
+//   //           });
+//   //         },
+//   //         templates: {
+//   //           item({ item, components }) {
+//   //             return (
+//   //               <div className="aa-ItemWrapper">
+//   //                 <div className="aa-ItemContent">
+//   //                   <div className="aa-ItemIcon">
+//   //                     <img
+//   //                       src={`https://cdn.naseong.kim/${item.objectID}`}
+//   //                       alt={item.contentName}
+//   //                       width="40"
+//   //                       height="40"
+//   //                     />
+//   //                   </div>
+//   //                   <div className="aa-ItemContentBody">
+//   //                     <div className="aa-ItemContentTitle">
+//   //                       <components.Snippet hit={item} attribute="contentName" />
+//   //                     </div>
+//   //                   </div>
+//   //                 </div>
+//   //               </div>
+//   //             ) as unknown as VNode;
+//   //           },
+//   //         },
+//   //       },
+//   //     ];
+//   //   },
+//   //   renderer: { createElement: h as Pragma, Fragment, render: render as Render },
+//   // });
+// })
 </script>
