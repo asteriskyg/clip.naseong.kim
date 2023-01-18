@@ -80,7 +80,6 @@ onMounted(async () => {
       id: clipDetails.data.creatorId
     }
   })
-  console.log(userPicData.data)
 
   userPic.value = userPicData.data.profileImageUrl
 })
