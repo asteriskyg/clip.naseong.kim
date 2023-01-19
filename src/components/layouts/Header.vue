@@ -139,11 +139,16 @@
         </div>
       </div>
     </div>
-    <div
-      class="flex flex-wrap justify-center gap-2 border-t bg-slate-50/30 p-3"
-    >
-      <div>베타 테스트 중 입니다.</div>
-      <div>버그를 발견했다면 웃으세요 :)</div>
+    <div class="flex flex-col items-center gap-2 border-t bg-slate-50/30 p-3">
+      <a
+        href="https://tgd.kr/s/naseongkim/68400017"
+        class="border-b border-blue-500 text-blue-500 transition-all duration-300 hover:text-blue-800"
+        >업데이트: 프로필 기능 추가</a
+      >
+      <div class="flex flex-wrap gap-1 text-sm">
+        <div>베타 테스트 중 입니다.</div>
+        <div>버그를 발견했다면 웃으세요 :)</div>
+      </div>
     </div>
   </div>
 </template>
