@@ -9,7 +9,11 @@ interface me {
   displayName: string;
   email: string;
   profileImageUrl: string;
+  profileBackgroundUrl: string;
   twitchUserId: number;
+  userType: string;
+  follow: Date | undefined;
+  subscription: number | undefined;
 }
 
 interface streamInfo {
