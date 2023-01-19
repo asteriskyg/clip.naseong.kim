@@ -2,10 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 *,
 html,
 body {
-  font-family: 'Pretendard Variable', sans-serif;
-  font-feature-settings: 'ss05';
+  font-family: "Pretendard Variable", sans-serif;
+  font-feature-settings: "ss05";
 }

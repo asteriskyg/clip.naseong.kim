@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import Header from './components/layouts/Header.vue'
-import Footer from './components/layouts/Footer.vue'
+import Header from "./components/layouts/Header.vue";
+import Footer from "./components/layouts/Footer.vue";
 </script>
 <template>
-  <div class="min-w-full min-h-full">
-    <Header/>
+  <div class="min-h-full min-w-full">
+    <Header />
     <router-view class="h-full"></router-view>
-    <Footer/>
+    <Footer />
   </div>
 </template>

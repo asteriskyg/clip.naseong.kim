@@ -5,19 +5,19 @@ export const useAuth = () => {
 
   const auth = {
     checkAuthority: async () => {
-      const accessToken = localStorage.getItem('access_token');
-      if(!accessToken) {
-        return false
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        return false;
       }
 
       try {
         const response = await axios.get(`${VITE_API_URL}/access`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-          }
+          },
         });
 
-        return true
+        return true;
       } catch {
         return auth.refreshAuthority();
       }
@@ -25,25 +25,25 @@ export const useAuth = () => {
 
     refreshAuthority: async () => {
       try {
-        const refreshToken = localStorage.getItem('refresh_token');
-        if(!refreshToken) {
-          return false
+        const refreshToken = localStorage.getItem("refresh_token");
+        if (!refreshToken) {
+          return false;
         }
 
         const response = await axios.get(`${VITE_API_URL}/refresh`, {
           headers: {
             Authorization: `Bearer ${refreshToken}`,
-          }
+          },
         });
 
-        localStorage.setItem('access_token', response.data.access_token)
+        localStorage.setItem("access_token", response.data.access_token);
 
-        return true
+        return true;
       } catch {
-        return false
+        return false;
       }
-    }
-  }
+    },
+  };
 
   return auth;
-}
+};
