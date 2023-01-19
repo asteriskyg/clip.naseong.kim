@@ -34,6 +34,10 @@ const routes: RouteRecordRaw[] = [
     path: "/detail/:id",
     component: () => import("/src/clip/detail.vue"),
   },
+  {
+    path: "/profile/:id",
+    component: () => import("/src/common/profile.vue"),
+  },
   // {
   //   path:'/create-image',
   //   component: () => import('/src/createImage.vue')
