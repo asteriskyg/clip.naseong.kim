@@ -7,7 +7,6 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { onMounted } from 'vue'
-import { router } from './router';
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {

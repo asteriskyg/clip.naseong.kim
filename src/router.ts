@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path:'/authorization',
-    component: () => import('/src/auth.vue')
+    component: () => import('/src/common/auth.vue')
   },
   // {
   //   path:'/upload',
@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
   // },
   {
     path:'/detail/:id',
-    component: () => import('/src/detail.vue')
+    component: () => import('/src/clip/detail.vue')
   },
   // {
   //   path:'/create-image',
@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
   // },
   {
     path: '/:pathMatch(.*)*',
-    component: ()=> import('/src/404.vue')
+    component: ()=> import('/src/common/404.vue')
   },
 ];
 

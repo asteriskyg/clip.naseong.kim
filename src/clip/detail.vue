@@ -29,12 +29,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router';
-import { useAuthStore } from './stores/auth';
+import { useAuthStore } from '../../stores/auth';
 import axios from 'axios';
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import RecentClipList from './components/RecentClipList.vue';
+import RecentClipList from '../../components/RecentClipList.vue';
 dayjs.extend(relativeTime)
 
 interface me {
