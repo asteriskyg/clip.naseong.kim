@@ -27,12 +27,18 @@
           {{ dayjs().locale("ko").to(dayjs(clip.clipCreatedAt)) }}
         </div>
       </div>
-      <div
+      <a
+        v-if="user"
+        :href="`/profile/${user.twitchUserId}`"
         class="mb-6 flex items-center gap-3 border-y px-6 py-3 sm:border-0 sm:py-0"
       >
-        <img class="h-8 w-8 rounded-full border" :src="userPic" alt="" />
-        <div>{{ clip.creatorName }}</div>
-      </div>
+        <img
+          class="h-8 w-8 rounded-full border"
+          :src="user?.profileImageUrl"
+          alt=""
+        />
+        <div>{{ user?.displayName }}</div>
+      </a>
       <div class="mx-auto w-full max-w-7xl p-6">
         <div class="mb-2 text-2xl font-bold">다른 클립 더보기</div>
         <RecentClipList />
@@ -51,14 +57,14 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import RecentClipList from "../components/RecentClipList.vue";
 dayjs.extend(relativeTime);
 
-interface me {
+interface User {
   displayName: string;
-  email: string;
+  email: string | null;
   profileImageUrl: string;
   twitchUserId: number;
 }
 
-interface clip {
+interface Clip {
   __v: number;
   _id: string;
   clipCreatedAt: Date;
@@ -73,9 +79,9 @@ interface clip {
 const VITE_API_URL: string = import.meta.env.VITE_API_URL;
 const auth = useAuthStore();
 const route = useRoute();
-const me = ref<me>();
-const userPic = ref<string>();
-const clip = ref<clip>();
+const me = ref<User>();
+const user = ref<User>();
+const clip = ref<Clip>();
 
 onMounted(async () => {
   me.value = auth.me;
@@ -87,12 +93,12 @@ onMounted(async () => {
   });
   clip.value = clipDetails.data;
 
-  const userPicData = await axios.get(`${VITE_API_URL}/getUserPic`, {
+  const userData = await axios.get(`${VITE_API_URL}/getUser`, {
     headers: {
       id: clipDetails.data.creatorId,
     },
   });
 
-  userPic.value = userPicData.data.profileImageUrl;
+  user.value = userData.data;
 });
 </script>
