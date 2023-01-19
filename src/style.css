@@ -1,11 +1,12 @@
+@import url('./assets/XEIcon-2.2.0/xeicon.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 *,
 html,
 body {
-  font-family: 'Pretendard Variable', sans-serif;
-  font-feature-settings: 'ss05';
+  font-family: "Pretendard Variable", sans-serif;
+  font-feature-settings: "ss05";
 }

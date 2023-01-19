@@ -1,16 +1,16 @@
-import { createWebHistory, createRouter, RouteRecordRaw } from 'vue-router';
-import { useAuth } from './plugins/useAuth';
+import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router";
+import { useAuth } from "./plugins/useAuth";
 
 const auth = useAuth();
 
 const routes: RouteRecordRaw[] = [
   {
-    path:'/',
-    component: () => import('/src/index.vue')
+    path: "/",
+    component: () => import("/src/index.vue"),
   },
   {
-    path:'/authorization',
-    component: () => import('/src/common/auth.vue')
+    path: "/authorization",
+    component: () => import("/src/common/auth.vue"),
   },
   // {
   //   path:'/upload',
@@ -31,16 +31,20 @@ const routes: RouteRecordRaw[] = [
   //   component: () => import('/src/list.vue')
   // },
   {
-    path:'/detail/:id',
-    component: () => import('/src/clip/detail.vue')
+    path: "/detail/:id",
+    component: () => import("/src/clip/detail.vue"),
+  },
+  {
+    path: "/profile/:id",
+    component: () => import("/src/common/profile.vue"),
   },
   // {
   //   path:'/create-image',
   //   component: () => import('/src/createImage.vue')
   // },
   {
-    path: '/:pathMatch(.*)*',
-    component: ()=> import('/src/common/404.vue')
+    path: "/:pathMatch(.*)*",
+    component: () => import("/src/common/404.vue"),
   },
 ];
 

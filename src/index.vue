@@ -1,11 +1,11 @@
 <template>
-  <div class="w-full max-w-7xl mx-auto p-6 mt-6">
-    <div class="text-4xl mb-4">최근 클립</div>
-    <RecentClipList/>
+  <div class="mx-auto mt-6 w-full max-w-7xl p-6">
+    <div class="mb-4 text-4xl">최근 클립</div>
+    <RecentClipList />
   </div>
 </template>
 <script setup lang="ts">
-import RecentClipList from './components/RecentClipList.vue'
+import RecentClipList from "./components/RecentClipList.vue";
 // import algoliasearch from 'algoliasearch/lite';
 // import { autocomplete, getAlgoliaResults, Pragma, Render, VNode } from '@algolia/autocomplete-js';
 // import '@algolia/autocomplete-theme-classic';

@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from "pinia";
+import { ref } from "vue";
 import { useAuth } from "../plugins/useAuth";
 import axios from "axios";
 
@@ -9,7 +9,11 @@ interface me {
   displayName: string;
   email: string;
   profileImageUrl: string;
+  profileBackgroundUrl: string;
   twitchUserId: number;
+  userType: string;
+  follow: Date | undefined;
+  subscription: number | undefined;
 }
 
 interface streamInfo {
@@ -30,12 +34,11 @@ interface streamInfo {
   is_mature: boolean;
 }
 
-export const useAuthStore = defineStore('auth', {
-
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     loginStatus: ref<boolean>(),
     me: ref<me>(),
-    streamInfo: ref<streamInfo>()
+    streamInfo: ref<streamInfo>(),
   }),
   actions: {
     async checkAuthority() {
@@ -43,7 +46,7 @@ export const useAuthStore = defineStore('auth', {
       const status = await auth.checkAuthority();
       this.loginStatus = status;
 
-      return this.loginStatus
+      return this.loginStatus;
     },
 
     async whoami() {
@@ -54,19 +57,21 @@ export const useAuthStore = defineStore('auth', {
         },
       });
 
-      return this.me = userData.data;
+      return (this.me = userData.data);
     },
 
     async getStreamInfo() {
       const accessToken = localStorage.getItem("access_token");
       const getStreamInfo = await axios.get(`${VITE_API_URL}/getStreamInfo`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-      getStreamInfo.data?.data[0] ? this.streamInfo = getStreamInfo.data?.data[0] : this.streamInfo = undefined
-      return this.streamInfo
-    }
-  }
-})
+      getStreamInfo.data?.data[0]
+        ? (this.streamInfo = getStreamInfo.data?.data[0])
+        : (this.streamInfo = undefined);
+      return this.streamInfo;
+    },
+  },
+});

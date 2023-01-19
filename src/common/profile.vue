@@ -1,0 +1,315 @@
+<template>
+  <div class="mx-auto w-full max-w-7xl md:p-6 md:mt-6">
+    <div class="group relative md:mb-16 lg:mb-24 overflow-hidden md:rounded-2xl md:shadow-2xl">
+      <div
+        class="flex h-36 sm:h-52 md:h-64 lg:h-72 items-start justify-end gap-2 border-b bg-slate-100 p-6"
+        :class="{
+          pattern: !user?.profileBackgroundUrl,
+          bg: user?.profileBackgroundUrl,
+        }"
+        :style="{
+          'background-image': user?.profileBackgroundUrl
+            ? `url('https://cdn.naseong.kim/${user.profileBackgroundUrl}')`
+            : '',
+        }"
+      >
+        <div
+          v-if="
+            user?.follow &&
+            user.userType !== 'streamer' &&
+            user.userType !== 'editor'
+          "
+          class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
+        >
+          {{ dayjs().locale("ko").to(dayjs(user?.follow), true) }} 팔로우 중
+        </div>
+        <div
+          v-if="
+            user?.subscription &&
+            user.userType !== 'streamer' &&
+            user.userType !== 'editor'
+          "
+          class="flex h-9 items-center justify-center rounded-full px-4 text-sm text-white shadow-lg"
+          :class="{
+            'bg-green-500 shadow-green-600': user?.subscription === 1000,
+            'bg-red-500 shadow-red-600': user?.subscription === 2000,
+            'bg-purple-500 shadow-purple-600': user?.subscription === 3000,
+          }"
+        >
+          {{ tier }}
+        </div>
+        <div
+          v-if="user?.userType === 'streamer'"
+          class="flex h-9 items-center justify-center rounded-full bg-orange-500 px-4 text-sm text-white shadow-lg shadow-orange-600"
+        >
+          스트리머
+        </div>
+        <div
+          v-if="user?.userType === 'editor'"
+          class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
+        >
+          편집자
+        </div>
+        <div
+          v-if="user?.userType === 'developer'"
+          class="flex h-9 items-center justify-center rounded-full bg-blue-500 px-4 text-sm text-white shadow-lg shadow-blue-600"
+        >
+          개발자
+        </div>
+        <button
+          v-if="user?.twitchUserId === me?.twitchUserId"
+          @click="setIsOpen(true)"
+          class="absolute bottom-20 mb-2 -mr-3 md:mb-6 md:mr-0 flex md:hidden h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl md:rounded-2xl bg-white/30 text-black backdrop-blur-xl hover:bg-white/70 group-hover:flex"
+        >
+          <i class="xi-image-o xi-x"></i>
+        </button>
+        <Dialog
+          :open="isOpen"
+          @close="setIsOpen"
+          class="fixed top-1/2 left-1/2 z-10 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black/30 backdrop-blur-sm"
+        >
+          <DialogPanel class="sm:rounded-2xl border bg-white p-6 max-w-[512px] w-full h-full sm:h-auto">
+            <DialogTitle class="mb-6 text-2xl font-bold"
+              >프로필 배경 바꾸기</DialogTitle
+            >
+            <div class="mb-2">어떤 이미지로 변경할까요?</div>
+            <input
+              class="mb-12"
+              ref="profileBgInput"
+              type="file"
+              accept="image/png, image/jpeg"
+            />
+            <div class="flex justify-end gap-3">
+              <button
+                class="rounded-2xl bg-slate-200 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                @click="setIsOpen(false)"
+              >
+                그만두기
+              </button>
+              <button
+                class="rounded-2xl bg-slate-200 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                @click="deleteBg"
+              >
+                기본값
+              </button>
+              <button
+                class="rounded-2xl bg-blue-500 px-4 py-3 text-white transition-all duration-300 md:hover:shadow-lg md:hover:shadow-blue-600"
+                @click="upload"
+              >
+                바꾸기
+              </button>
+            </div>
+          </DialogPanel>
+        </Dialog>
+      </div>
+      <div
+        class="md:absolute bottom-0 flex w-full flex-col bg-slate-100/70 px-6 pb-6 backdrop-blur-lg"
+      >
+        <div class="h-6 w-full">
+          <img
+            class="w-20 h-20 sm:h-24 sm:w-24 -translate-y-1/2 overflow-hidden rounded-full border bg-white p-1"
+            :src="user?.profileImageUrl"
+            alt=""
+          />
+        </div>
+        <div class="text-right text-xl md:text-2xl lg:text-3xl">{{ user?.displayName }}</div>
+      </div>
+    </div>
+    <div class="p-6 md:p-0">
+      <div class="mb-2 text-2xl font-bold">만든 클립</div>
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <a
+          v-for="item in clips"
+          :href="`/detail/${item.contentId}`"
+          class="min-w-fit overflow-hidden rounded-xl border bg-white transition-shadow duration-300 hover:shadow-2xl"
+        >
+          <img
+            :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${item.contentId}/thumbnails/thumbnail.jpg`"
+            alt=""
+          />
+          <div class="p-4">
+            <div class="mb-2 text-xl font-semibold line-clamp-1">
+              {{ item.contentName }}
+            </div>
+            <div style="overflow-wrap: anywhere">
+              {{ dayjs().locale("ko").to(dayjs(item.clipCreatedAt)) }}
+            </div>
+          </div>
+          <div
+            v-if="clipIndex <= 10"
+            class="mt-6 flex w-full items-center justify-center"
+          >
+            <button
+              class="rounded-full bg-gray-200 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 md:hover:bg-blue-500"
+              @click="loadMore"
+            >
+              더보기
+            </button>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { computed, onMounted, ref } from "vue";
+import { useAuthStore } from "../stores/auth";
+import { useRoute } from "vue-router";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
+import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
+interface User {
+  displayName: string;
+  email: string | undefined;
+  profileImageUrl: string;
+  profileBackgroundUrl: string;
+  twitchUserId: number;
+  userType: string;
+  follow: Date | undefined;
+  subscription: number | undefined;
+}
+
+interface Clips {
+  clipCreatedAt: Date;
+  contentId: number;
+  contentName: string;
+  creatorName: string;
+  gameId: number;
+  streamStartedAt: Date;
+}
+
+const VITE_API_URL: string = import.meta.env.VITE_API_URL;
+
+const auth = useAuthStore();
+const route = useRoute();
+const me = ref<User>();
+const user = ref<User>();
+const profileBgInput = ref<HTMLInputElement>();
+const clips = ref<Clips[]>([]);
+const clipIndex = ref(999);
+const isOpen = ref(false);
+
+function setIsOpen(value: boolean) {
+  isOpen.value = value;
+}
+
+onMounted(async () => {
+  const userData = await axios.get(`${VITE_API_URL}/getUser`, {
+    headers: {
+      id: route.params.id,
+    },
+  });
+  user.value = userData.data;
+
+  const clipsData = await axios.get(`${VITE_API_URL}/getUserClips?offset=0`, {
+    headers: {
+      id: route.params.id,
+    },
+  });
+
+  if (clipsData.data.length > 12) {
+    clipIndex.value = 1;
+  }
+
+  clips.value = clipsData.data;
+
+  me.value = auth.me;
+});
+
+const tier = computed(() => {
+  if (user.value?.subscription === 1000) {
+    return "1티어";
+  } else if (user.value?.subscription === 2000) {
+    return "2티어";
+  } else if (user.value?.subscription === 3000) {
+    return "3티어";
+  }
+});
+
+async function loadMore() {
+  const clipLists = await axios.get(
+    `${VITE_API_URL}/getClipLists?offset=${clipIndex.value}`
+  );
+  clipIndex.value = clipIndex.value + 1;
+
+  for (let i = 0; i < clipLists.data.length; i++) {
+    clips.value.push(clipLists.data[i]);
+  }
+
+  if (clipLists.data.length < 12) {
+    clipIndex.value = 999;
+  }
+}
+
+async function upload() {
+  if (!profileBgInput.value?.files) {
+    return;
+  }
+
+  const now = new Date().getTime();
+  const accessToken = localStorage.getItem("access_token");
+  const url = await axios.get(
+    `${VITE_API_URL}/getSignedUrl?filename=${user.value?.twitchUserId}-bg-${now}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  await axios.put(url.data.signedUrl, profileBgInput.value?.files[0], {
+    headers: {
+      "Content-Type": profileBgInput.value?.files[0].type,
+    },
+  });
+
+  const updateBg = await axios.post(
+    `${VITE_API_URL}/updateBg`,
+    {
+      contentId: `${user.value?.twitchUserId}-bg-${now}`,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  user.value!.profileBackgroundUrl = updateBg.data;
+  setIsOpen(false);
+}
+
+async function deleteBg() {
+  const accessToken = localStorage.getItem("access_token");
+
+  await axios.post(
+    `${VITE_API_URL}/updateBg`,
+    {
+      contentId: '',
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  user.value!.profileBackgroundUrl = '';
+  setIsOpen(false);
+}
+</script>
+<style>
+.pattern {
+  background-color: #dfdbe5;
+  background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+</style>
