@@ -16,8 +16,7 @@
         <div
           v-if="
             user?.follow &&
-            user.userType !== 'streamer' &&
-            user.userType !== 'editor'
+            user.userType !== 'streamer'
           "
           class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
         >
@@ -26,8 +25,7 @@
         <div
           v-if="
             user?.subscription &&
-            user.userType !== 'streamer' &&
-            user.userType !== 'editor'
+            user.userType !== 'streamer'
           "
           class="flex h-9 items-center justify-center rounded-full px-4 text-sm text-white shadow-lg"
           :class="{
@@ -74,7 +72,7 @@
             >
             <div class="mb-2">어떤 이미지로 변경할까요?</div>
             <input
-              class="mb-12"
+              class="w-full mb-12 px-4 py-3 rounded-2xl bg-slate-200"
               ref="profileBgInput"
               type="file"
               accept="image/png, image/jpeg"
