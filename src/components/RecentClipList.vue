@@ -5,10 +5,12 @@
       :href="`/detail/${item.contentId}`"
       class="min-w-fit overflow-hidden rounded-xl border bg-white transition-shadow duration-300 hover:shadow-2xl"
     >
+    <div class="aspect-w-16 aspect-h-9">
       <img
         :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${item.contentId}/thumbnails/thumbnail.jpg`"
         alt=""
       />
+    </div>
       <div class="p-4">
         <div class="mb-2 text-xl font-semibold line-clamp-1">
           {{ item.contentName }}
