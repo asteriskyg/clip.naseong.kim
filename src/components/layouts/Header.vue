@@ -10,7 +10,7 @@
           </a>
           <button
             v-if="streamInfo"
-            @click="toggleLive"
+            @click="modal = !modal"
             class="select-none rounded-full bg-red-500 px-4 py-1 text-sm text-white shadow-lg shadow-red-600"
           >
             LIVE
@@ -106,7 +106,7 @@
       >
         <div class="mb-6 flex items-center justify-between">
           <div>지금 방송 중</div>
-          <button @click="toggleLive">
+          <button @click="modal = !modal">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -168,7 +168,11 @@ interface Me {
   displayName: string;
   email: string;
   profileImageUrl: string;
+  profileBackgroundUrl: string;
   twitchUserId: number;
+  userType: string;
+  follow: Date | undefined;
+  subscription: number | undefined;
 }
 
 interface StreamInfo {
@@ -194,27 +198,17 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const auth = useAuthStore();
 const loginStatus = ref(true);
-const me = ref<Me>();
+const me = ref<Me | undefined>();
+const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
-const streamInfo = ref<StreamInfo>();
 
 onMounted(async () => {
-  const authority = await auth.checkAuthority();
-
-  if (!authority) {
-    return (loginStatus.value = false);
-  }
-
-  const whoami = await auth.whoami();
-  me.value = whoami;
-
-  const getStreamInfo = await auth.getStreamInfo();
-  streamInfo.value = getStreamInfo;
+  loginStatus.value = await auth.checkAuthority();
+  loginStatus.value === true
+    ? (me.value = await auth.whoami())
+    : (me.value = undefined);
+  streamInfo.value = await auth.getStreamInfo();
 });
-
-function toggleLive() {
-  modal.value = !modal.value;
-}
 
 async function logout() {
   const accessToken = localStorage.getItem("access_token");

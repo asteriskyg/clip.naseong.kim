@@ -5,7 +5,7 @@ import axios from "axios";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-interface me {
+interface Me {
   displayName: string;
   email: string;
   profileImageUrl: string;
@@ -16,7 +16,7 @@ interface me {
   subscription: number | undefined;
 }
 
-interface streamInfo {
+interface StreamInfo {
   id: number;
   user_id: number;
   user_login: string;
@@ -36,42 +36,45 @@ interface streamInfo {
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    loginStatus: ref<boolean>(),
-    me: ref<me>(),
-    streamInfo: ref<streamInfo>(),
+    loginStatus: ref<boolean>(true),
+    me: ref<Me>(),
+    streamInfo: ref<StreamInfo>(),
   }),
   actions: {
     async checkAuthority() {
       const auth = useAuth();
       const status = await auth.checkAuthority();
-      this.loginStatus = status;
-
-      return this.loginStatus;
+      return (this.loginStatus = status);
     },
 
     async whoami() {
-      const accessToken = localStorage.getItem("access_token");
-      const userData = await axios.get(`${VITE_API_URL}/whoami`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      try {
+        const accessToken = localStorage.getItem("access_token");
+        const userData = await axios.get(`${VITE_API_URL}/whoami`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-      return (this.me = userData.data);
+        return (this.me = userData.data as Me);
+      } catch (e) {
+        this.me = undefined;
+      }
     },
 
     async getStreamInfo() {
-      const accessToken = localStorage.getItem("access_token");
-      const getStreamInfo = await axios.get(`${VITE_API_URL}/getStreamInfo`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      try {
+        const accessToken = localStorage.getItem("access_token");
+        const getStreamInfo = await axios.get(`${VITE_API_URL}/getStreamInfo`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-      getStreamInfo.data?.data[0]
-        ? (this.streamInfo = getStreamInfo.data?.data[0])
-        : (this.streamInfo = undefined);
-      return this.streamInfo;
+        return (this.streamInfo = getStreamInfo.data?.data[0]);
+      } catch (e) {
+        return undefined;
+      }
     },
   },
 });
