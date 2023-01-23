@@ -25,10 +25,10 @@
         <div
           v-if="
             dayjs().isBefore(
-              dayjs(clip.clipCreatedAt).locale('ko').add(5, 'm')
+              dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm')
             ) ||
             (dayjs().isBefore(
-              dayjs(clip.clipLastEdited).locale('ko').add(5, 'm')
+              dayjs(clip.clipLastEdited).locale('ko').add(10, 'm')
             ) &&
               !clipUrl)
           "
@@ -84,7 +84,10 @@
             class="flex w-full flex-col justify-end gap-3 px-6 sm:flex-row sm:px-0"
           >
             <button
-              @click="clipUrl = undefined"
+              @click="
+                clipUrl = undefined;
+                clipPercent = 0;
+              "
               class="transiton-all hidden rounded-2xl bg-slate-200 px-6 py-3 text-black duration-300 sm:block md:hover:bg-slate-300"
             >
               취소
@@ -106,12 +109,20 @@
             </button>
           </div>
         </div>
-        <div
-          v-if="!isClipReady"
-          class="sm:text-md mx-6 mt-6 flex flex-wrap gap-x-1 rounded-2xl border border-blue-500 bg-blue-50 p-4 text-sm sm:mx-0 md:text-lg"
-        >
-          <span>클립을 준비하고 있어요.</span>
-          <span>1분 이상 반응이 없으면 새로고침 후 다시 시도해주세요.</span>
+        <div v-if="!isClipReady" class="relative">
+          <div
+            class="sm:text-md mx-6 mt-6 flex flex-wrap gap-x-1 rounded-2xl border border-blue-500 bg-blue-100/50 p-4 text-sm sm:mx-0 md:text-lg"
+          >
+            <span
+              >클립을 준비하고 있어요. 잠시만 기다려주세요. ({{
+                clipPercent
+              }}%)</span
+            >
+          </div>
+          <div
+            class="sm:text-md absolute top-0 left-0 -z-10 flex h-full flex-wrap gap-x-1 rounded-2xl bg-blue-300 text-sm transition-all duration-300 sm:mx-0 md:text-lg"
+            :style="`width: ${clipPercent}%`"
+          ></div>
         </div>
       </div>
       <div class="flex flex-col items-start justify-between p-6 md:flex-row">
@@ -207,9 +218,16 @@ const clipUrl = ref<clipUrl>();
 const isClipReady = ref(true);
 const editClipName = ref<string>("");
 const value = ref([0, 0]);
+const loginStatus = ref(true);
+const clipPercent = ref(0);
 
 watch(value, () => {
   const [min, max] = value.value;
+
+  if (min > max - 10) {
+    value.value[0] = max - 10;
+    value.value[1] = min + 10;
+  }
 
   if (min === 0 && max <= 10) {
     value.value[0] = 0;
@@ -223,21 +241,20 @@ watch(value, () => {
     value.value[0] = clip.value?.clipDuration - 10;
     value.value[1] = clip.value?.clipDuration;
   }
-
-  if (min > max - 10) {
-    value.value[0] = max - 10;
-    value.value[1] = min + 10;
-  }
 });
 
 onMounted(async () => {
-  me.value = auth.me;
+  loginStatus.value = await auth.checkAuthority();
+  loginStatus.value === true
+    ? (me.value = await auth.whoami())
+    : (me.value = undefined);
 
   const clipDetails = await axios.get(`${VITE_API_URL}/getClipDetails`, {
     headers: {
       item: route.params.id,
     },
   });
+
   clip.value = clipDetails.data;
 
   const userData = await axios.get(`${VITE_API_URL}/getUser`, {
@@ -247,14 +264,6 @@ onMounted(async () => {
   });
 
   user.value = userData.data;
-
-  if (clip.value?.clipDuration === 10) {
-    value.value[0] = 0;
-    value.value[1] = 10;
-  } else {
-    value.value[0] = 0;
-    value.value[1] = clip.value?.clipDuration!;
-  }
 });
 
 const timeFromStream = computed(() => {
@@ -276,21 +285,40 @@ const timeFromStream = computed(() => {
 
 async function getDownload() {
   isClipReady.value = false;
+  fetch();
 
-  const data = await axios.post(
-    `${VITE_API_URL}/trimClip`,
-    {
-      id: clip.value?.contentId,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  async function fetch() {
+    const data = await axios.post(
+      `${VITE_API_URL}/trimClip`,
+      {
+        id: clip.value?.contentId,
       },
-    }
-  );
-  clipUrl.value = data.data;
-  isClipReady.value = true;
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+
+    clipPercent.value = data.data.percentComplete;
+    console.log(clipPercent.value);
+    return data.data;
+  }
+
+  while (clipPercent.value < 100) {
+    await fetch();
+    setTimeout(() => {}, 1000);
+  }
+
+  if (clipPercent.value === 100) {
+    clipUrl.value = (await fetch()).url;
+    isClipReady.value = true;
+  }
+
+  value.value[0] = 0;
+  value.value[1] = clip.value?.clipDuration!;
 }
+
 async function loop() {
   if (trim.value.currentTime > value.value[1]) {
     trim.value.currentTime = value.value[0];
