@@ -1,8 +1,10 @@
 <template>
-  <div class="mx-auto w-full max-w-7xl md:p-6 md:mt-6">
-    <div class="group relative md:mb-16 lg:mb-24 overflow-hidden md:rounded-2xl md:shadow-2xl">
+  <div class="mx-auto w-full max-w-7xl md:mt-6 md:p-6">
+    <div
+      class="group relative overflow-hidden md:mb-16 md:rounded-2xl md:shadow-2xl lg:mb-24"
+    >
       <div
-        class="flex h-36 sm:h-52 md:h-64 lg:h-72 items-start justify-end gap-2 border-b bg-slate-100 p-6"
+        class="flex h-36 items-start justify-end gap-2 border-b bg-slate-100 p-6 sm:h-52 md:h-64 lg:h-72"
         :class="{
           pattern: !user?.profileBackgroundUrl,
           bg: user?.profileBackgroundUrl,
@@ -14,19 +16,13 @@
         }"
       >
         <div
-          v-if="
-            user?.follow &&
-            user.userType !== 'streamer'
-          "
+          v-if="user?.follow && user.userType !== 'streamer'"
           class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
         >
-          {{ dayjs().locale("ko").to(dayjs(user?.follow), true) }} 팔로우 중
+          {{ dayjs().diff(dayjs(user?.follow), "M") }}개월 팔로우 중
         </div>
         <div
-          v-if="
-            user?.subscription &&
-            user.userType !== 'streamer'
-          "
+          v-if="user?.subscription && user.userType !== 'streamer'"
           class="flex h-9 items-center justify-center rounded-full px-4 text-sm text-white shadow-lg"
           :class="{
             'bg-green-500 shadow-green-600': user?.subscription === 1000,
@@ -34,7 +30,7 @@
             'bg-purple-500 shadow-purple-600': user?.subscription === 3000,
           }"
         >
-          {{ tier }}
+          {{ tier }} 구독자
         </div>
         <div
           v-if="user?.userType === 'streamer'"
@@ -57,7 +53,7 @@
         <button
           v-if="user?.twitchUserId === me?.twitchUserId"
           @click="setIsOpen(true)"
-          class="absolute bottom-20 mb-2 -mr-3 md:mb-6 md:mr-0 flex md:hidden h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl md:rounded-2xl bg-white/30 text-black backdrop-blur-xl hover:bg-white/70 group-hover:flex"
+          class="absolute bottom-20 mb-2 -mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/30 text-black backdrop-blur-xl hover:bg-white/70 group-hover:flex md:mb-6 md:mr-0 md:hidden md:h-12 md:w-12 md:rounded-2xl"
         >
           <i class="xi-image-o xi-x"></i>
         </button>
@@ -66,13 +62,15 @@
           @close="setIsOpen"
           class="fixed top-1/2 left-1/2 z-10 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black/30 backdrop-blur-sm"
         >
-          <DialogPanel class="sm:rounded-2xl border bg-white p-6 max-w-[512px] w-full h-full sm:h-auto">
+          <DialogPanel
+            class="h-full w-full max-w-[512px] border bg-white p-6 sm:h-auto sm:rounded-2xl"
+          >
             <DialogTitle class="mb-6 text-2xl font-bold"
               >프로필 배경 바꾸기</DialogTitle
             >
             <div class="mb-2">어떤 이미지로 변경할까요?</div>
             <input
-              class="w-full mb-12 px-4 py-3 rounded-2xl bg-slate-200"
+              class="mb-12 w-full rounded-2xl bg-slate-200 px-4 py-3"
               ref="profileBgInput"
               type="file"
               accept="image/png, image/jpeg"
@@ -101,16 +99,18 @@
         </Dialog>
       </div>
       <div
-        class="md:absolute bottom-0 flex w-full flex-col bg-slate-100/70 px-6 pb-6 backdrop-blur-lg"
+        class="bottom-0 flex w-full flex-col bg-slate-100/70 px-6 pb-6 backdrop-blur-lg md:absolute"
       >
         <div class="h-6 w-full">
           <img
-            class="w-20 h-20 sm:h-24 sm:w-24 -translate-y-1/2 overflow-hidden rounded-full border bg-white p-1"
+            class="h-20 w-20 -translate-y-1/2 overflow-hidden rounded-full border bg-white p-1 sm:h-24 sm:w-24"
             :src="user?.profileImageUrl"
             alt=""
           />
         </div>
-        <div class="text-right text-xl md:text-2xl lg:text-3xl">{{ user?.displayName }}</div>
+        <div class="text-right text-xl md:text-2xl lg:text-3xl">
+          {{ user?.displayName }}
+        </div>
       </div>
     </div>
     <div class="p-6 md:p-0">
@@ -190,12 +190,18 @@ const profileBgInput = ref<HTMLInputElement>();
 const clips = ref<Clips[]>([]);
 const clipIndex = ref(999);
 const isOpen = ref(false);
+const loginStatus = ref(true);
 
 function setIsOpen(value: boolean) {
   isOpen.value = value;
 }
 
 onMounted(async () => {
+  loginStatus.value = await auth.checkAuthority();
+  loginStatus.value === true
+    ? (me.value = await auth.whoami())
+    : (me.value = undefined);
+
   const userData = await axios.get(`${VITE_API_URL}/getUser`, {
     headers: {
       id: route.params.id,
@@ -214,8 +220,6 @@ onMounted(async () => {
   }
 
   clips.value = clipsData.data;
-
-  me.value = auth.me;
 });
 
 const tier = computed(() => {
@@ -287,7 +291,7 @@ async function deleteBg() {
   await axios.post(
     `${VITE_API_URL}/updateBg`,
     {
-      contentId: '',
+      contentId: "",
     },
     {
       headers: {
@@ -296,7 +300,7 @@ async function deleteBg() {
     }
   );
 
-  user.value!.profileBackgroundUrl = '';
+  user.value!.profileBackgroundUrl = "";
   setIsOpen(false);
 }
 </script>
