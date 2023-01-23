@@ -311,7 +311,7 @@ async function getDownload() {
   }
 
   if (clipPercent.value === 100) {
-    clipUrl.value = (await fetch()).url;
+    clipUrl.value = await fetch();
     isClipReady.value = true;
   }
 
