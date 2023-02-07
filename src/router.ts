@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/authorization',
-    component: async () => await import('./common/auth.vue'),
+    component: async () => await import('./common/getAuthority.vue'),
   },
   // {
   //   path:'/upload',
@@ -28,11 +28,11 @@ const routes: RouteRecordRaw[] = [
   // },
   {
     path: '/detail/:id',
-    component: async () => await import('./clip/detail.vue'),
+    component: async () => await import('./clip/clipDetail.vue'),
   },
   {
     path: '/profile/:id',
-    component: async () => await import('./common/profile.vue'),
+    component: async () => await import('./common/userProfile.vue'),
   },
   // {
   //   path:'/create-image',
@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
   // },
   {
     path: '/:pathMatch(.*)*',
-    component: async () => await import('./common/404.vue'),
+    component: async () => await import('./common/notFound.vue'),
   },
 ];
 
