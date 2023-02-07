@@ -1,16 +1,12 @@
-import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router";
-import { useAuth } from "./plugins/useAuth";
-
-const auth = useAuth();
-
+import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
-    component: () => import("/src/index.vue"),
+    path: '/',
+    component: async () => await import('./index.vue'),
   },
   {
-    path: "/authorization",
-    component: () => import("/src/common/auth.vue"),
+    path: '/authorization',
+    component: async () => await import('./common/auth.vue'),
   },
   // {
   //   path:'/upload',
@@ -31,20 +27,20 @@ const routes: RouteRecordRaw[] = [
   //   component: () => import('/src/list.vue')
   // },
   {
-    path: "/detail/:id",
-    component: () => import("/src/clip/detail.vue"),
+    path: '/detail/:id',
+    component: async () => await import('./clip/detail.vue'),
   },
   {
-    path: "/profile/:id",
-    component: () => import("/src/common/profile.vue"),
+    path: '/profile/:id',
+    component: async () => await import('./common/profile.vue'),
   },
   // {
   //   path:'/create-image',
   //   component: () => import('/src/createImage.vue')
   // },
   {
-    path: "/:pathMatch(.*)*",
-    component: () => import("/src/common/404.vue"),
+    path: '/:pathMatch(.*)*',
+    component: async () => await import('./common/404.vue'),
   },
 ];
 
