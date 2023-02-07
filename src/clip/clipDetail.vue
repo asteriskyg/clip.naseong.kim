@@ -11,15 +11,8 @@
           style="position: relative; padding-top: 56.25%"
         >
           <iframe
-            :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${clip.contentId}/iframe?preload=true&poster=https%3A%2F%2Fcustomer-lsoi5zwkd51of53g.cloudflarestream.com%2F${clip.contentId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`"
-            style="
-              border: none;
-              position: absolute;
-              top: 0;
-              left: 0;
-              height: 100%;
-              width: 100%;
-            "
+            :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${clip.contentId}/iframe?preload=true&loop=true&poster=https%3A%2F%2Fcustomer-lsoi5zwkd51of53g.cloudflarestream.com%2F${clip.contentId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`"
+            style="border: none;position: absolute;top: 0;left: 0;height: 100%;width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowfullscreen="true"
           />
@@ -27,10 +20,10 @@
         <div
           v-if="
             dayjs().isBefore(
-              dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm'),
+              dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm')
             ) ||
               (dayjs().isBefore(
-                dayjs(clip.clipLastEdited).locale('ko').add(10, 'm'),
+                dayjs(clip.clipLastEdited).locale('ko').add(10, 'm')
               ) &&
                 !clipUrl)
           "
@@ -103,7 +96,8 @@
             </button>
             <button
               :disabled="
-                clip.clipDuration === timecode[1] - timecode[0] && editClipName === ''
+                clip.clipDuration === timecode[1] - timecode[0]
+                  && editClipName === ''
               "
               class="transiton-all rounded-2xl bg-blue-500 px-6 py-4 text-white duration-300 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:hover:bg-slate-200 sm:py-3 md:hover:bg-blue-600"
               @click="updateClip"
@@ -130,7 +124,7 @@
             }}%)</span>
           </div>
           <div
-            class="sm:text-md absolute p-4 top-0 left-0 -z-10 flex h-full flex-wrap gap-x-1 rounded-2xl bg-blue-300 text-sm transition-all duration-300 md:text-lg"
+            class="sm:text-md absolute top-0 left-0 -z-10 flex h-full flex-wrap gap-x-1 rounded-2xl bg-blue-300 p-4 text-sm transition-all duration-300 md:text-lg"
             :style="`width: ${clipPercent}%`"
           />
         </div>
@@ -142,8 +136,8 @@
           </div>
           <div>
             <span class="text-gray-500">방송일자: </span>
-            {{ dayjs(clip.clipCreatedAt).format('YYYY년 MM월 DD일') }} ({{
-              dayjs().locale('ko').to(dayjs(clip.clipCreatedAt))
+            {{ dayjs(clip.clipCreatedAt).format("YYYY년 MM월 DD일") }} ({{
+              dayjs().locale("ko").to(dayjs(clip.clipCreatedAt))
             }})
           </div>
           <div>
@@ -263,31 +257,39 @@ watch(timecode, () => {
 onMounted(async () => {
   me.value = await authStore.whoami();
 
-  clip.value = (await axios.get(`${VITE_API_URL}/getClipDetails`, {
-    headers: {
-      item: route.params.id,
-    },
-  }).catch(async () => {
-    await auth.refreshAuthority();
-    return await axios.get(`${VITE_API_URL}/getClipDetails`, {
-      headers: {
-        item: route.params.id,
-      },
-    });
-  })).data;
+  clip.value = (
+    await axios
+      .get(`${VITE_API_URL}/getClipDetails`, {
+        headers: {
+          item: route.params.id,
+        },
+      })
+      .catch(async () => {
+        await auth.refreshAuthority();
+        return await axios.get(`${VITE_API_URL}/getClipDetails`, {
+          headers: {
+            item: route.params.id,
+          },
+        });
+      })
+  ).data;
 
-  user.value = (await axios.get(`${VITE_API_URL}/getUser`, {
-    headers: {
-      id: clip.value?.creatorId,
-    },
-  }).catch(async () => {
-    await auth.refreshAuthority();
-    return await axios.get(`${VITE_API_URL}/getUser`, {
-      headers: {
-        id: clip.value?.creatorId,
-      },
-    });
-  })).data;
+  user.value = (
+    await axios
+      .get(`${VITE_API_URL}/getUser`, {
+        headers: {
+          id: clip.value?.creatorId,
+        },
+      })
+      .catch(async () => {
+        await auth.refreshAuthority();
+        return await axios.get(`${VITE_API_URL}/getUser`, {
+          headers: {
+            id: clip.value?.creatorId,
+          },
+        });
+      })
+  ).data;
 });
 
 const timeFromStream = computed(() => {
@@ -318,17 +320,18 @@ async function editClip() {
   fetch();
 
   async function fetch() {
-    const response = (await axios.post(
-      `${VITE_API_URL}/trimClip`,
-      {
-        id: clip.value?.contentId,
-      },
-    ).catch(async () => {
-      await auth.refreshAuthority();
-      return await axios.post(`${VITE_API_URL}/trimClip`, {
-        id: clip.value?.contentId,
-      });
-    })).data;
+    const response = (
+      await axios
+        .post(`${VITE_API_URL}/trimClip`, {
+          id: clip.value?.contentId,
+        })
+        .catch(async () => {
+          await auth.refreshAuthority();
+          return await axios.post(`${VITE_API_URL}/trimClip`, {
+            id: clip.value?.contentId,
+          });
+        })
+    ).data;
 
     clipPercent.value = response.percentComplete;
     return response;
@@ -362,23 +365,22 @@ async function loop() {
 }
 
 async function updateClip() {
-  const updateResult = await axios.post(
-    `${VITE_API_URL}/updateClip`,
-    {
+  const updateResult = await axios
+    .post(`${VITE_API_URL}/updateClip`, {
       id: clip.value?.contentId,
       name: editClipName.value,
       start: timecode.value[0],
       end: timecode.value[1],
-    },
-  ).catch(async () => {
-    await auth.refreshAuthority();
-    return await axios.post(`${VITE_API_URL}/updateClip`, {
-      id: clip.value?.contentId,
-      name: editClipName.value,
-      start: timecode.value[0],
-      end: timecode.value[1],
+    })
+    .catch(async () => {
+      await auth.refreshAuthority();
+      return await axios.post(`${VITE_API_URL}/updateClip`, {
+        id: clip.value?.contentId,
+        name: editClipName.value,
+        start: timecode.value[0],
+        end: timecode.value[1],
+      });
     });
-  });
 
   window.location.href = `/detail/${updateResult.data}`;
 }
