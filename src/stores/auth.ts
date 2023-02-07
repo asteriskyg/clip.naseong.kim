@@ -1,9 +1,10 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
-import { useAuth } from "../plugins/useAuth";
-import axios from "axios";
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import axios from 'axios';
+import { useAuth } from '../plugins/useAuth';
 
-const VITE_API_URL = import.meta.env.VITE_API_URL;
+const VITE_API_URL: string = import.meta.env.VITE_API_URL;
+const auth = useAuth();
 
 interface Me {
   displayName: string;
@@ -34,46 +35,43 @@ interface StreamInfo {
   is_mature: boolean;
 }
 
-export const useAuthStore = defineStore("auth", {
+export const useAuthStore = defineStore('auth', {
   state: () => ({
-    loginStatus: ref<boolean>(true),
-    me: ref<Me>(),
     streamInfo: ref<StreamInfo>(),
+    me: ref<Me>(),
   }),
   actions: {
-    async checkAuthority() {
-      const auth = useAuth();
-      const status = await auth.checkAuthority();
-      return (this.loginStatus = status);
-    },
-
     async whoami() {
-      try {
-        const accessToken = localStorage.getItem("access_token");
-        const userData = await axios.get(`${VITE_API_URL}/whoami`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+      if (this.me !== undefined) return this.me;
 
-        return (this.me = userData.data as Me);
-      } catch (e) {
-        this.me = undefined;
+      try {
+        const response = await axios.get(`${VITE_API_URL}/whoami`);
+        return (this.me = response.data);
+      } catch {
+        try {
+          await auth.refreshAuthority();
+          const response = await axios.get(`${VITE_API_URL}/whoami`);
+          return (this.me = response.data);
+        } catch {
+          return (this.me = undefined);
+        }
       }
     },
 
     async getStreamInfo() {
-      try {
-        const accessToken = localStorage.getItem("access_token");
-        const getStreamInfo = await axios.get(`${VITE_API_URL}/getStreamInfo`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+      if (this.streamInfo !== undefined) return this.streamInfo;
 
-        return (this.streamInfo = getStreamInfo.data?.data[0]);
-      } catch (e) {
-        return undefined;
+      try {
+        const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
+        return (this.streamInfo = response.data?.data[0]);
+      } catch {
+        try {
+          await auth.refreshAuthority();
+          const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
+          return (this.streamInfo = response.data?.data[0]);
+        } catch {
+          return (this.streamInfo = undefined);
+        }
       }
     },
   },

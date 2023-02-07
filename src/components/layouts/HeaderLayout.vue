@@ -200,20 +200,17 @@ const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const auth = useAuthStore();
-const loginStatus = ref(true);
 const me = ref<Me | undefined>();
 const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
 
 onMounted(async () => {
-  loginStatus.value === true
-    ? (me.value = await auth.whoami())
-    : (me.value = undefined);
+  me.value = await auth.whoami();
   streamInfo.value = await auth.getStreamInfo();
 });
 
 async function logout() {
   await axios.get(`${VITE_API_URL}/logout`);
-  window.location.reload();
+  window.location.href = '/';
 }
 </script>
