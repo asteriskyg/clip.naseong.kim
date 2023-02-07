@@ -19,7 +19,7 @@
           v-if="user?.follow && user.userType !== 'streamer'"
           class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
         >
-          {{ dayjs().diff(dayjs(user?.follow), 'M') }}개월 팔로우 중
+          {{ dayjs().diff(dayjs(user?.follow), "M") }}개월 팔로우 중
         </div>
         <div
           v-if="user?.subscription && user.userType !== 'streamer'"
@@ -135,21 +135,21 @@
               {{ item.contentName }}
             </div>
             <div style="overflow-wrap: anywhere">
-              {{ dayjs().locale('ko').to(dayjs(item.clipCreatedAt)) }}
+              {{ dayjs().locale("ko").to(dayjs(item.clipCreatedAt)) }}
             </div>
           </div>
-          <div
-            v-if="clipIndex <= 10"
-            class="mt-6 flex w-full items-center justify-center"
-          >
-            <button
-              class="rounded-full bg-gray-200 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 md:hover:bg-blue-500"
-              @click="loadMore"
-            >
-              더보기
-            </button>
-          </div>
         </a>
+      </div>
+      <div
+        v-if="clips.length - clipIndex * 12 > 12"
+        class="mt-6 flex w-full items-center justify-center"
+      >
+        <button
+          class="rounded-full bg-gray-200 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 md:hover:bg-blue-500"
+          @click="loadMore"
+        >
+          더보기
+        </button>
       </div>
     </div>
   </div>
@@ -195,7 +195,7 @@ const me = ref<User>();
 const user = ref<User>();
 const profileBgInput = ref<HTMLInputElement>();
 const clips = ref<Clips[]>([]);
-const clipIndex = ref(999);
+const clipIndex = ref(1);
 const isOpen = ref(false);
 
 function setIsOpen(value: boolean) {
@@ -217,10 +217,6 @@ onMounted(async () => {
       id: route.params.id,
     },
   });
-
-  if (clipsData.data.length > 12) {
-    clipIndex.value = 1;
-  }
 
   clips.value = clipsData.data;
 });
@@ -245,10 +241,6 @@ async function loadMore() {
 
   for (let i = 0; i < clipLists.data.length; i++) {
     clips.value.push(clipLists.data[i]);
-  }
-
-  if (clipLists.data.length < 12) {
-    clipIndex.value = 999;
   }
 }
 
