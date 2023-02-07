@@ -99,6 +99,7 @@
           </Menu>
         </div>
         <a
+          v-if="!me"
           :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
           class="rounded-full bg-[#9146ff] py-2 px-4 text-white"
         >로그인</a>
