@@ -99,7 +99,7 @@
           </Menu>
         </div>
         <a
-          v-if="!me"
+          v-if="!loginStatus"
           :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
           class="rounded-full bg-[#9146ff] py-2 px-4 text-white"
         >로그인</a>
@@ -201,12 +201,19 @@ const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const auth = useAuthStore();
+const loginStatus = ref(true);
 const me = ref<Me | undefined>();
 const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
 
 onMounted(async () => {
   me.value = await auth.whoami();
+  me.value
+    ? loginStatus.value = true
+    : window.location.pathname === '/authorization'
+      ? loginStatus.value = true
+      : loginStatus.value = false;
+
   streamInfo.value = await auth.getStreamInfo();
 });
 
