@@ -30,7 +30,7 @@
                 >
               </MenuButton>
               <MenuItems
-                class="absolute right-0 flex w-48 flex-col overflow-hidden rounded-xl border bg-white shadow-2xl"
+                class="absolute right-0 flex w-48 flex-col overflow-hidden rounded-xl border bg-white shadow-2xl z-10"
               >
                 <div class="border-b px-4 pt-3 pb-2">
                   <div class="text-sm">
