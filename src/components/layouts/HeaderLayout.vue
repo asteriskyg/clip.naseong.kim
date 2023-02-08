@@ -147,8 +147,15 @@
     </div>
     <div class="flex flex-col items-center gap-2 border-t bg-slate-50/30 p-3">
       <div class="flex flex-wrap justify-center gap-1 text-sm">
-        <div>베타 테스트 중 입니다.</div>
-        <div>버그를 발견했다면 오른쪽 아래 채널톡으로 알려주세요. :)</div>
+        <div>나클립은 베타 테스트 중이에요.</div>
+        <div class="flex justify-center items-center gap-1">
+          버그 제보, 의견 보내기는 오른쪽 아래 채널톡을 이용해주세요.
+          <img
+            class="h-5 sm:ml-1"
+            src="https://static-cdn.jtvnw.net/emoticons/v2/302045542/default/dark/1.0"
+            alt="보노따봉"
+          >
+        </div>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 @import url('./assets/XEIcon-2.2.0/xeicon.min.css');
+@import url('pretendard/dist/web/static/pretendard-dynamic-subset.css');
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +8,6 @@
 *,
 html,
 body {
-  font-family: "Pretendard Variable", sans-serif;
+  font-family: "Pretendard", sans-serif;
   font-feature-settings: "ss05";
 }
