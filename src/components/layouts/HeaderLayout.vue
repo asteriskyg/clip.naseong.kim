@@ -7,9 +7,9 @@
         <div class="flex items-center gap-4">
           <a
             href="/"
-            class="flex text-3xl"
+            class="text-3xl"
           >
-            <div>naseong.kim</div>
+            na.<b>clip</b>
           </a>
           <button
             v-if="streamInfo"
