@@ -119,9 +119,7 @@
           <div
             class="sm:text-md flex flex-wrap gap-x-1 rounded-2xl border border-blue-500 bg-blue-100/50 p-4 text-sm md:text-lg"
           >
-            <span>클립을 준비하고 있어요. 잠시만 기다려주세요. ({{
-              clipPercent
-            }}%)</span>
+            <span>{{ prepareClip }}</span>
           </div>
           <div
             class="sm:text-md absolute top-0 left-0 -z-10 flex h-full flex-wrap gap-x-1 rounded-2xl bg-blue-300 p-4 text-sm transition-all duration-300 md:text-lg"
@@ -227,6 +225,7 @@ const isClipReady = ref(true);
 const editClipName = ref<string>('');
 const timecode = ref([0, 0]);
 const clipPercent = ref(0);
+const counter = ref(1);
 
 watch(timecode, () => {
   if (!clip.value) {
@@ -292,6 +291,14 @@ onMounted(async () => {
   ).data;
 });
 
+const prepareClip = computed(() => {
+  if (counter.value < 5) {
+    return `클립을 준비하고 있어요. 잠시만 기다려주세요. (${clipPercent.value}%)`;
+  } else {
+    return `평소보다 시간이 걸리고 있어요. 조금만 더 기다려주세요. (${clipPercent.value}%)`;
+  }
+});
+
 const timeFromStream = computed(() => {
   if (!clip.value) {
     return;
@@ -316,6 +323,7 @@ async function editClip() {
     return;
   }
 
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   isClipReady.value = false;
   fetch();
 
@@ -339,9 +347,8 @@ async function editClip() {
 
   while (clipPercent.value < 100) {
     await fetch();
-    setTimeout(() => {
-      console.log(clipPercent.value);
-    }, 1000);
+    counter.value = counter.value + 1;
+    await sleep(5000);
   }
 
   if (clipPercent.value === 100) {
@@ -381,6 +388,13 @@ async function updateClip() {
         end: timecode.value[1],
       });
     });
+
+  if (updateResult.data !== clip.value?.contentId) {
+    axios.post(`${VITE_API_URL}/deleteClip`, {
+      newId: updateResult.data,
+      id: clip.value?.contentId,
+    });
+  }
 
   window.location.href = `/detail/${updateResult.data}`;
 }
