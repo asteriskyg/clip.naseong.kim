@@ -7,7 +7,7 @@
       <div class="sm:p-6 sm:pb-0">
         <div
           v-if="!clipUrl"
-          class="sm:border"
+          class="sm:border sm:rounded-lg md:rounded-xl sm:overflow-hidden"
           style="position: relative; padding-top: 56.25%"
         >
           <iframe

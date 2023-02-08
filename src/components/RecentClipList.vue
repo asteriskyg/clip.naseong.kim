@@ -1,17 +1,28 @@
 <template>
   <div v-if="recentClipLists">
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <a
         v-for="item in recentClipLists"
         :key="item.contentId"
         :href="`/detail/${item.contentId}`"
-        class="min-w-fit overflow-hidden rounded-xl border bg-white transition-shadow duration-300 hover:shadow-2xl"
+        class="min-w-fit overflow-hidden rounded-lg border bg-white transition-shadow duration-300 hover:shadow-2xl"
       >
-        <div class="aspect-w-16 aspect-h-9">
-          <img
-            :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${item.contentId}/thumbnails/thumbnail.jpg`"
-            alt=""
-          >
+        <div class="relative first-letter:aspect-w-16 aspect-h-9">
+          <div>
+            <img
+              :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${item.contentId}/thumbnails/thumbnail.jpg`"
+              alt=""
+            >
+            <div
+              class="absolute bottom-2 right-2 flex h-7 w-12 items-center justify-center rounded-lg bg-black/20 text-sm text-white backdrop-blur-sm"
+            >
+              {{
+                item.clipDuration > 59
+                  ? `1:${item.clipDuration - 60}`
+                  : `0:${item.clipDuration}`
+              }}
+            </div>
+          </div>
         </div>
         <div class="p-4">
           <div class="mb-2 text-xl font-semibold line-clamp-1">
@@ -21,7 +32,7 @@
             {{ item.creatorName }}
           </div>
           <div style="overflow-wrap: anywhere">
-            {{ dayjs().locale('ko').to(dayjs(item.clipCreatedAt)) }}
+            {{ dayjs().locale("ko").to(dayjs(item.clipCreatedAt)) }}
           </div>
         </div>
       </a>
