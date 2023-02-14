@@ -164,7 +164,7 @@
         <div>{{ user?.displayName }}</div>
       </a>
       <div class="mx-auto w-full max-w-7xl p-6">
-        <div class="mb-2 text-2xl font-bold">
+        <div class="mb-4 text-2xl font-bold">
           다른 클립 더보기
         </div>
         <RecentClipList />

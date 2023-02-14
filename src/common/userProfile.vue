@@ -116,8 +116,8 @@
       </div>
     </div>
     <div class="p-6 md:p-0">
-      <div class="mb-2 text-2xl font-bold">
-        만든 클립
+      <div class="mb-4 text-2xl font-bold">
+        {{ user?.displayName }}님의 클립
       </div>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <a
