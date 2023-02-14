@@ -37,7 +37,7 @@ interface StreamInfo {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    streamInfo: ref<StreamInfo>(),
+    streamInfo: ref<StreamInfo | undefined | null>(),
     me: ref<Me>(),
   }),
   actions: {
@@ -62,18 +62,21 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async getStreamInfo() {
-      if (this.streamInfo !== undefined) return this.streamInfo;
+      if (this.streamInfo != null) return this.streamInfo;
 
       try {
         const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
         return (this.streamInfo = response.data?.data[0]);
       } catch {
         try {
-          await auth.refreshAuthority();
+          if (!await auth.refreshAuthority()) {
+            return (this.streamInfo = null);
+          }
+
           const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
           return (this.streamInfo = response.data?.data[0]);
         } catch {
-          return (this.streamInfo = undefined);
+          return (this.streamInfo = null);
         }
       }
     },
