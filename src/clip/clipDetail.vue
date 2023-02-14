@@ -318,8 +318,9 @@ const timeFromStream = computed(() => {
   }
 });
 
-function updateInput(event: any) {
-  const updatedText = event.target.value;
+function updateInput(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const updatedText = target.value;
   editClipName.value = updatedText;
 }
 
