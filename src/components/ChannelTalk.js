@@ -32,8 +32,3 @@
     w.addEventListener('load', l);
   }
 })();
-
-// eslint-disable-next-line no-undef
-ChannelIO('boot', {
-  pluginKey: '02450e74-074b-4597-bb95-a9aa42f7f5d2',
-});
