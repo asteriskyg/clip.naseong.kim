@@ -1,4 +1,4 @@
-@import url('./assets/XEIcon-2.2.0/xeicon.min.css');
+@import url('./assets/XEIcon/xeicon.min.css');
 @import url('pretendard/dist/web/static/pretendard-dynamic-subset.css');
 
 @tailwind base;
@@ -10,4 +10,10 @@ html,
 body {
   font-family: "Pretendard", sans-serif;
   font-feature-settings: "ss05";
+  word-break: keep-all;
+}
+
+span.icon {
+  font-family : 'xeicon',emoji !important;
+  font-size: 2.5rem;
 }
