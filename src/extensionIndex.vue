@@ -46,7 +46,6 @@ const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
 const status = ref('loading');
 const clipName = ref('');
-const elem = ref<HTMLDivElement>();
 const tab = ref(false);
 let clipId: string;
 
@@ -67,7 +66,7 @@ onMounted(async () => {
         : (status.value = 'error');
   }
 
-  if (status.value === 'online') window.postMessage({ status: 'online' }, VITE_HOST_URL);
+  if (status.value === 'online') { window.postMessage({ status: 'online' }, VITE_HOST_URL); }
 });
 
 const blockStatus = computed(() => {
@@ -102,8 +101,8 @@ const blockStatus = computed(() => {
     color = 'green';
     button = true;
     clipName.value
-      ? buttonText = '이름 바꾸기'
-      : buttonText = '클립 보러가기';
+      ? (buttonText = '이름 바꾸기')
+      : (buttonText = '클립 보러가기');
   } else if (status.value === 'edit') {
     icon = 'xi-check-circle-o';
     title = '이름 변경 완료!';
@@ -118,7 +117,8 @@ const blockStatus = computed(() => {
     buttonText = '다시 시도하기';
   } else if (status.value === 'criticalEdit') {
     icon = 'xi-error-o';
-    title = '지금은 이름을 바꿀 수 없어요. 나클립 홈페이지에서 다시 시도해주세요.';
+    title =
+      '지금은 이름을 바꿀 수 없어요. 나클립 홈페이지에서 다시 시도해주세요.';
     color = 'red';
     button = true;
     buttonText = '클립 보러가기';
@@ -172,13 +172,10 @@ async function buttonAction() {
   } else if (status.value === 'success') {
     if (clipName.value) {
       const updateClipName = await (
-        await axios.post(
-          `${VITE_API_URL}/editClip`,
-          {
-            id: clipId,
-            name: clipName.value,
-          },
-        )
+        await axios.post(`${VITE_API_URL}/editClip`, {
+          id: clipId,
+          name: clipName.value,
+        })
       ).data;
 
       if (!updateClipName) {
@@ -193,13 +190,10 @@ async function buttonAction() {
   } else if (status.value === 'editFailed') {
     if (clipName.value) {
       const updateClipName = await (
-        await axios.post(
-          `${VITE_API_URL}/editClip`,
-          {
-            id: clipId,
-            name: clipName.value,
-          },
-        )
+        await axios.post(`${VITE_API_URL}/editClip`, {
+          id: clipId,
+          name: clipName.value,
+        })
       ).data;
 
       if (!updateClipName) {
@@ -222,7 +216,7 @@ async function buttonAction() {
   } else if (status.value === 'criticalFetch') {
     window.open('https://twitch.tv/naseongkim');
   } else if (status.value === 'createFailed') {
-    await createClip()
+    (await createClip())
       ? (status.value = 'success')
       : (status.value = 'criticalCreate');
   }
@@ -230,9 +224,7 @@ async function buttonAction() {
 
 async function createClip() {
   status.value = 'create';
-  const createClip = await (
-    await axios.get(`${VITE_API_URL}/createClip`)
-  ).data;
+  const createClip = await (await axios.get(`${VITE_API_URL}/createClip`)).data;
 
   if (!createClip) {
     status.value = 'createFailed';
@@ -252,152 +244,154 @@ window.addEventListener('message', async (e) => {
   if (e.origin !== VITE_HOST_URL) return;
   console.log(e.data.window);
   e.data.window && status.value === 'online'
-    ? tab.value = true
-    : tab.value = false;
+    ? (tab.value = true)
+    : (tab.value = false);
 
   console.log(tab.value);
 });
 </script>
 <template>
-  <div
-    ref="elem"
-    class="w-full border-b bg-slate-100/50 backdrop-blur-lg"
-  >
-    <div class="m-auto w-full max-w-7xl px-6 py-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center text-3xl">
-          <a
-            href="/"
-            target="_blank"
-            class="text-3xl"
-          >na.<b>clip</b></a>
-        </div>
-        <button v-if="me">
-          <img
-            :src="me.profileImageUrl"
-            class="h-10 w-10 rounded-full border"
-            alt=""
-            @click="modal = !modal"
-          >
-        </button>
-      </div>
-      <div v-if="modal">
-        <div class="mt-6 flex flex-col rounded-3xl bg-slate-200 p-5">
-          <img
-            :src="me?.profileImageUrl"
-            class="mb-3 h-16 w-16 rounded-2xl border-2"
-            :alt="`${me?.displayName}님의 트위치 프로필 이미지`"
-          >
-          <span
-            class="overflow-hidden text-xl font-semibold line-clamp-1"
-            style="overflow-wrap: anywhere"
-          >
-            {{ me?.displayName }}
-          </span>
-          <a
-            :href="`${VITE_HOST_URL}/profile/${me?.twitchUserId}`"
-            target="_blank"
-            class="mt-6 cursor-pointer rounded-2xl bg-slate-300 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
-          >내 프로필 보기
-          </a>
-          <button
-            class="mt-2 cursor-pointer rounded-2xl bg-red-200 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
-            @click="logout"
-          >
-            로그아웃
+  <div>
+    <div
+      class="w-full border-b bg-slate-100/50 backdrop-blur-lg"
+    >
+      <div class="m-auto w-full max-w-sm px-6 py-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center text-3xl">
+            <a
+              href="/"
+              target="_blank"
+              class="text-3xl"
+            >na.<b>clip</b></a>
+          </div>
+          <button v-if="me">
+            <img
+              :src="me.profileImageUrl"
+              class="h-10 w-10 rounded-full border"
+              alt=""
+              @click="modal = !modal"
+            >
           </button>
         </div>
-        <div class="pt-2 text-center text-sm text-slate-500">
-          확장 프로그램 버전 2.0.0
+        <div v-if="modal">
+          <div class="mt-6 flex flex-col rounded-3xl bg-slate-200 p-5">
+            <img
+              :src="me?.profileImageUrl"
+              class="mb-3 h-16 w-16 rounded-2xl border-2"
+              :alt="`${me?.displayName}님의 트위치 프로필 이미지`"
+            >
+            <span
+              class="overflow-hidden text-xl font-semibold line-clamp-1"
+              style="overflow-wrap: anywhere"
+            >
+              {{ me?.displayName }}
+            </span>
+            <a
+              :href="`${VITE_HOST_URL}/profile/${me?.twitchUserId}`"
+              target="_blank"
+              class="mt-6 cursor-pointer rounded-2xl bg-slate-300 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
+            >내 프로필 보기
+            </a>
+            <button
+              class="mt-2 cursor-pointer rounded-2xl bg-red-200 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
+              @click="logout"
+            >
+              로그아웃
+            </button>
+          </div>
+          <div class="pt-2 text-center text-sm text-slate-500">
+            확장 프로그램 버전 2.0.0
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="flex flex-col p-5 max-w-sm m-auto">
-    <div
-      class="flex flex-col rounded-3xl p-5"
-      :class="{
-        'bg-slate-200': blockStatus.color === 'slate',
-        'bg-blue-200': blockStatus.color === 'blue',
-        'bg-green-200': blockStatus.color === 'green',
-        'bg-red-200': blockStatus.color === 'red',
-      }"
-    >
-      <span
-        class="icon"
-        :class="blockStatus.icon"
-      />
+    <div class="m-auto flex max-w-sm flex-col p-5">
       <div
+        class="flex flex-col rounded-3xl p-5"
         :class="{
-          'text-xl mb-2 font-semibold overflow-hidden line-clamp-2': status === 'online',
-          'text-2xl': status === 'offline',
-          'text-xl': status !== 'offline',
+          'bg-slate-200': blockStatus.color === 'slate',
+          'bg-blue-200': blockStatus.color === 'blue',
+          'bg-green-200': blockStatus.color === 'green',
+          'bg-red-200': blockStatus.color === 'red',
         }"
       >
-        {{ blockStatus.title }}
-      </div>
-      <div v-if="status === 'online'">
-        <div class="text-base overflow-hidden line-clamp-1">
-          {{ streamInfo?.game_name }}
-        </div>
-        <div class="text-base">
-          {{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}
-        </div>
-      </div>
-      <div v-if="status === 'success'">
-        <div class="mt-6 mb-1">
-          클립의 이름을 정할 수 있어요.
-        </div>
-        <div class="mb-2 text-sm">
-          이름을 정하지 않으면 방송 제목을 그대로 사용해요. 언제든지 변경할 수 있어요.
-        </div>
-        <input
-          :placeholder="streamInfo?.title"
-          :value="clipName"
-          type="text"
-          class="w-full rounded-xl border-white py-3 px-4"
-          @input="updateInput"
+        <span
+          class="icon"
+          :class="blockStatus.icon"
+        />
+        <div
+          :class="{
+            'mb-2 overflow-hidden text-xl font-semibold line-clamp-2':
+              status === 'online',
+            'text-2xl': status === 'offline',
+            'text-xl': status !== 'offline',
+          }"
         >
-      </div>
-      <button
-        v-if="blockStatus.button"
-        target="_blank"
-        class="mt-4 cursor-pointer rounded-2xl p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg"
-        :class="[
-          { 'hidden': tab, },
-          {
-            'bg-slate-100 hover:shadow-slate-400': blockStatus.color === 'slate',
+          {{ blockStatus.title }}
+        </div>
+        <div v-if="status === 'online'">
+          <div class="overflow-hidden text-base line-clamp-1">
+            {{ streamInfo?.game_name }}
+          </div>
+          <div class="text-base">
+            {{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}
+          </div>
+        </div>
+        <div v-if="status === 'success'">
+          <div class="mt-6 mb-1">
+            클립의 이름을 정할 수 있어요.
+          </div>
+          <div class="mb-2 text-sm">
+            이름을 정하지 않으면 방송 제목을 그대로 사용해요. 언제든지 변경할 수
+            있어요.
+          </div>
+          <input
+            :placeholder="streamInfo?.title"
+            :value="clipName"
+            type="text"
+            class="w-full rounded-xl border-white py-3 px-4"
+            @input="updateInput"
+          >
+        </div>
+        <button
+          v-if="blockStatus.button"
+          target="_blank"
+          class="mt-4 cursor-pointer rounded-2xl p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg"
+          :class="{
+            hidden: tab,
+            'bg-slate-100 hover:shadow-slate-400':
+              blockStatus.color === 'slate',
             'bg-blue-100 hover:shadow-blue-400': blockStatus.color === 'blue',
             'bg-green-100 hover:shadow-green-400': blockStatus.color === 'green',
             'bg-red-100 hover:shadow-red-400': blockStatus.color === 'red',
-          }
-        ]"
-        @click="buttonAction"
+          }"
+          @click="buttonAction"
+        >
+          {{ blockStatus.buttonText }}
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="!loginStatus"
+      id="loginButton"
+      class="fixed bottom-0 left-1/2 flex w-full max-w-sm -translate-x-1/2 bg-white/30 p-5 backdrop-blur-md"
+    >
+      <a
+        :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
+        target="_blank"
+        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
+      >트위치로 로그인</a>
+    </div>
+    <div
+      v-if="status === 'online' && tab"
+      class="fixed bottom-0 left-1/2 flex w-full max-w-sm -translate-x-1/2 bg-white/30 p-5 backdrop-blur-md"
+    >
+      <button
+        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60 disabled:cursor-not-allowed disabled:bg-[#9146ff]/30 disabled:hover:shadow-none"
+        @click="createClip"
       >
-        {{ blockStatus.buttonText }}
+        클립 만들기
       </button>
     </div>
-  </div>
-  <div
-    v-if="!loginStatus"
-    id="loginButton"
-    class="fixed bottom-0 flex w-full bg-white/30 p-5 backdrop-blur-md"
-  >
-    <a
-      :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
-      target="_blank"
-      class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
-    >트위치로 로그인</a>
-  </div>
-  <div
-    v-if="status === 'online' && tab"
-    class="fixed bottom-0 flex w-full bg-white/30 p-5 backdrop-blur-md"
-  >
-    <button
-      class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60 disabled:cursor-not-allowed disabled:bg-[#9146ff]/30 disabled:hover:shadow-none"
-      @click="createClip"
-    >
-      클립 만들기
-    </button>
   </div>
 </template>
