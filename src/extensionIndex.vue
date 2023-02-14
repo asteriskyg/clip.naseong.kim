@@ -63,7 +63,7 @@ onMounted(async () => {
     streamInfo.value
       ? (status.value = 'online')
       : streamInfo.value === undefined
-        ? (status.value = 'online')
+        ? (status.value = 'offline')
         : (status.value = 'error');
   }
 
