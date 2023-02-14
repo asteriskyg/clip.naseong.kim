@@ -38,7 +38,7 @@
       </a>
     </div>
     <div
-      v-if="recentClipLists.length - clipIndex * 12 > 12"
+      v-if="recentClipLists.length - clipIndex * 12 === 0"
       class="mt-6 flex w-full items-center justify-center"
     >
       <button
@@ -84,7 +84,7 @@ onMounted(async () => {
 
 async function loadMore() {
   const clipLists = await axios.get(
-    `${VITE_API_URL}/getClipLists?offset=${clipIndex.value}`,
+    `${VITE_API_URL}/getRecentClip?offset=${clipIndex.value}`,
   );
   clipIndex.value = clipIndex.value + 1;
   recentClipLists.value = recentClipLists.value.concat(clipLists.data);

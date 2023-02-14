@@ -19,13 +19,12 @@
         </div>
         <div
           v-if="
-            dayjs().isBefore(
-              dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm')
-            ) ||
-              (dayjs().isBefore(
-                dayjs(clip.clipLastEdited).locale('ko').add(10, 'm')
-              ) &&
-                !clipUrl)
+            (
+              (
+                dayjs().isBefore(dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm'))
+                || dayjs().isBefore(dayjs(clip.clipLastEdited).locale('ko').add(10, 'm'))
+              )
+              && !clipUrl)
           "
           class="sm:text-md mx-6 mt-6 flex flex-wrap gap-x-1 rounded-2xl border border-orange-500 bg-orange-50 p-4 text-sm sm:mx-0 md:text-lg"
         >
@@ -77,9 +76,10 @@
               <span>입력하지 않으면 바뀌지 않아요.</span>
             </div>
             <input
-              v-model="editClipName"
+              :value="editClipName"
               class="w-full rounded-2xl bg-slate-200 px-6 py-4"
               :placeholder="clip.contentName"
+              @input="updateInput"
             >
           </div>
           <div
@@ -292,7 +292,7 @@ onMounted(async () => {
 });
 
 const prepareClip = computed(() => {
-  if (counter.value < 5) {
+  if (counter.value < 7) {
     return `클립을 준비하고 있어요. 잠시만 기다려주세요. (${clipPercent.value}%)`;
   } else {
     return `평소보다 시간이 걸리고 있어요. 조금만 더 기다려주세요. (${clipPercent.value}%)`;
@@ -317,6 +317,11 @@ const timeFromStream = computed(() => {
     return `${hour}시간 ${minutes}분 ${secondsLeft}초`;
   }
 });
+
+function updateInput(event: any) {
+  const updatedText = event.target.value;
+  editClipName.value = updatedText;
+}
 
 async function editClip() {
   if (!clip.value) {
