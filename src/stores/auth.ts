@@ -49,7 +49,10 @@ export const useAuthStore = defineStore('auth', {
         return (this.me = response.data);
       } catch {
         try {
-          await auth.refreshAuthority();
+          if (!await auth.refreshAuthority()) {
+            return (this.me = undefined);
+          }
+
           const response = await axios.get(`${VITE_API_URL}/whoami`);
           return (this.me = response.data);
         } catch {
