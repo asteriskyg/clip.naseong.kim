@@ -266,7 +266,11 @@ window.addEventListener('message', async (e) => {
     <div class="m-auto w-full max-w-7xl px-6 py-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center text-3xl">
-          na.<b>clip</b>
+          <a
+            href="/"
+            target="_blank"
+            class="text-3xl"
+          >na.<b>clip</b></a>
         </div>
         <button v-if="me">
           <img
@@ -309,10 +313,15 @@ window.addEventListener('message', async (e) => {
       </div>
     </div>
   </div>
-  <div class="flex flex-col p-5">
+  <div class="flex flex-col p-5 max-w-sm m-auto">
     <div
       class="flex flex-col rounded-3xl p-5"
-      :class="`bg-${blockStatus.color}-200`"
+      :class="{
+        'bg-slate-200': blockStatus.color === 'slate',
+        'bg-blue-200': blockStatus.color === 'blue',
+        'bg-green-200': blockStatus.color === 'green',
+        'bg-red-200': blockStatus.color === 'red',
+      }"
     >
       <span
         class="icon"
@@ -356,8 +365,12 @@ window.addEventListener('message', async (e) => {
         class="mt-4 cursor-pointer rounded-2xl p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg"
         :class="[
           { 'hidden': tab, },
-          `bg-${blockStatus.color}-100
-          hover:shadow-b${blockStatus.color}-400`
+          {
+            'bg-slate-100 hover:shadow-slate-400': blockStatus.color === 'slate',
+            'bg-blue-100 hover:shadow-blue-400': blockStatus.color === 'blue',
+            'bg-green-100 hover:shadow-green-400': blockStatus.color === 'green',
+            'bg-red-100 hover:shadow-red-400': blockStatus.color === 'red',
+          }
         ]"
         @click="buttonAction"
       >
