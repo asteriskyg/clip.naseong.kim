@@ -67,7 +67,7 @@ onMounted(async () => {
         : (status.value = 'error');
   }
 
-  if (status.value === 'online') window.postMessage({ status: 'online' }, 'https://dev.naseong.kim');
+  if (status.value === 'online') window.postMessage({ status: 'online' }, VITE_HOST_URL);
 });
 
 const blockStatus = computed(() => {
@@ -188,7 +188,7 @@ async function buttonAction() {
 
       status.value = 'edit';
     } else {
-      window.open(`https://naseong.kim/detail/${clipId}`);
+      window.open(`${VITE_HOST_URL}/detail/${clipId}`);
     }
   } else if (status.value === 'editFailed') {
     if (clipName.value) {
@@ -209,7 +209,7 @@ async function buttonAction() {
 
       status.value = 'edit';
     } else {
-      window.open(`https://naseong.kim/detail/${clipId}`);
+      window.open(`${VITE_HOST_URL}/detail/${clipId}`);
     }
   } else if (status.value === 'fetchFailed') {
     status.value = 'loading';
@@ -249,7 +249,7 @@ async function logout() {
 }
 
 window.addEventListener('message', async (e) => {
-  if (e.origin !== 'https://dev.naseong.kim') return;
+  if (e.origin !== VITE_HOST_URL) return;
   console.log(e.data.window);
   e.data.window && status.value === 'online'
     ? tab.value = true
@@ -371,7 +371,7 @@ window.addEventListener('message', async (e) => {
     class="fixed bottom-0 flex w-full bg-white/30 p-5 backdrop-blur-md"
   >
     <a
-      href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=https://dev.naseong.kim/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions"
+      :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
       target="_blank"
       class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
     >트위치로 로그인</a>
