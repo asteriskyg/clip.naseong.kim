@@ -243,12 +243,12 @@ async function logout() {
 
 window.addEventListener('message', async (e) => {
   if (e.origin !== VITE_HOST_URL) return;
-  console.log(e.data.window);
-  e.data.window && status.value === 'online'
-    ? (tab.value = true)
-    : (tab.value = false);
 
-  console.log(tab.value);
+  if (e.data.status === 'online' || e.data.window) {
+    tab.value = true;
+  } else {
+    tab.value = false;
+  }
 });
 </script>
 <template>
