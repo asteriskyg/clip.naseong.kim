@@ -145,7 +145,7 @@
         </div>
         <div class="flex gap-3">
           <button
-            v-if="!clipUrl && me"
+            v-if="!clipUrl && clip.creatorId === me?.twitchUserId"
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
             @click="editClip"
           >
