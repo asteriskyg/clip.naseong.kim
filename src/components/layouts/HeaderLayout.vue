@@ -134,10 +134,16 @@
         <div>{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</div>
         <div class="flex">
           <a
-            id="broadcast-button"
+            href="/extension"
+            class="mt-4 w-full cursor-pointer rounded-2xl bg-blue-100 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-blue-400"
+          >클립 만들기
+          </a>
+        </div>
+        <div class="flex">
+          <a
             href="https://twitch.tv/naseongkim"
             target="_blank"
-            class="mt-4 w-full cursor-pointer rounded-2xl bg-blue-100 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-blue-400"
+            class="mt-2 w-full cursor-pointer rounded-2xl bg-blue-100 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-blue-400"
           >방송 바로가기
           </a>
         </div>
