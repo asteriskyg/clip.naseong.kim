@@ -243,11 +243,12 @@ async function logout() {
 
 window.addEventListener('message', async (e) => {
   if (e.origin !== VITE_HOST_URL) return;
-
   if (e.data.status === 'online' || e.data.window) {
     tab.value = true;
   } else {
-    tab.value = false;
+    e.data.devtoolsEnabled
+      ? tab.value = true
+      : tab.value = false;
   }
 });
 </script>
