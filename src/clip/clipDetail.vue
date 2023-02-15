@@ -143,13 +143,22 @@
             {{ timeFromStream }}
           </div>
         </div>
-        <button
-          v-if="!clipUrl && clip.creatorId === me?.twitchUserId"
-          class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
-          @click="editClip"
-        >
-          클립 수정
-        </button>
+        <div class="flex gap-3">
+          <button
+            v-if="!clipUrl && me"
+            class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
+            @click="editClip"
+          >
+            클립 수정
+          </button>
+          <button
+            v-if="!clipUrl && me && me?.userType !== 'viewer'"
+            class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
+            @click="downloadClip"
+          >
+            클립 다운로드
+          </button>
+        </div>
       </div>
       <a
         v-if="user"
@@ -190,6 +199,7 @@ interface User {
   email: string | null;
   profileImageUrl: string;
   twitchUserId: number;
+  userType: string;
 }
 
 interface Clip {
@@ -365,6 +375,49 @@ async function editClip() {
 
   timecode.value[0] = 0;
   timecode.value[1] = clip.value.clipDuration;
+}
+
+async function downloadClip() {
+  if (!clip.value) {
+    return;
+  }
+
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  isClipReady.value = false;
+  fetch();
+
+  async function fetch() {
+    const response = (
+      await axios
+        .post(`${VITE_API_URL}/trimClip`, {
+          id: clip.value?.contentId,
+        })
+        .catch(async () => {
+          await auth.refreshAuthority();
+          return await axios.post(`${VITE_API_URL}/trimClip`, {
+            id: clip.value?.contentId,
+          });
+        })
+    ).data;
+
+    clipPercent.value = response.percentComplete;
+    return response;
+  }
+
+  while (clipPercent.value < 100) {
+    await fetch();
+    counter.value = counter.value + 1;
+    await sleep(5000);
+  }
+
+  if (clipPercent.value === 100) {
+    const download = document.createElement('a');
+    download.href = await (await fetch()).url;
+    download.click();
+
+    isClipReady.value = true;
+    clipPercent.value = 0;
+  }
 }
 
 async function loop() {
