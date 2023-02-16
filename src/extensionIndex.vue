@@ -91,7 +91,7 @@ const blockStatus = computed(() => {
     button = true;
     buttonText = '방송 보러가기';
   } else if (status.value === 'create') {
-    icon = 'xi-movie';
+    icon = 'xi-cut';
     title = '클립을 만들고 있어요.';
     color = 'slate';
     button = false;
@@ -188,24 +188,22 @@ async function buttonAction() {
     } else {
       window.open(`${VITE_HOST_URL}/detail/${clipId}`);
     }
+  } else if (status.value === 'edit') {
+    window.open(`${VITE_HOST_URL}/detail/${clipId}`);
   } else if (status.value === 'editFailed') {
-    if (clipName.value) {
-      const updateClipName = await (
-        await axios.post(`${VITE_API_URL}/editClip`, {
-          id: clipId,
-          name: clipName.value,
-        })
-      ).data;
+    const updateClipName = await (
+      await axios.post(`${VITE_API_URL}/editClip`, {
+        id: clipId,
+        name: clipName.value,
+      })
+    ).data;
 
-      if (!updateClipName) {
-        status.value = 'criticalEdit';
-        return;
-      }
-
-      status.value = 'edit';
-    } else {
-      window.open(`${VITE_HOST_URL}/detail/${clipId}`);
+    if (!updateClipName) {
+      status.value = 'criticalEdit';
+      return;
     }
+
+    status.value = 'edit';
   } else if (status.value === 'fetchFailed') {
     status.value = 'loading';
     streamInfo.value = await auth.getStreamInfo();
@@ -216,6 +214,8 @@ async function buttonAction() {
         : (status.value = 'criticalFetch');
   } else if (status.value === 'criticalFetch') {
     window.open('https://twitch.tv/naseongkim');
+  } else if (status.value === 'criticalEdit') {
+    window.open(`${VITE_HOST_URL}/detail/${clipId}`);
   } else if (status.value === 'createFailed') {
     (await createClip())
       ? (status.value = 'success')
@@ -232,8 +232,8 @@ async function createClip() {
     return false;
   }
 
-  clipName.value = createClip.broadcastTitle;
   clipId = createClip.clipId;
+  status.value = 'success';
 }
 
 async function logout() {
@@ -302,12 +302,12 @@ window.addEventListener('message', async (e) => {
             </button>
           </div>
           <div class="pt-2 text-center text-sm text-slate-500">
-            확장 프로그램 버전 2.0.0
+            확장 프로그램 버전 2.1.0
           </div>
         </div>
       </div>
     </div>
-    <div class="m-auto flex max-w-sm flex-col p-5">
+    <div class="m-auto flex max-w-sm flex-col p-5 mb-24">
       <div
         class="flex flex-col rounded-3xl p-5"
         :class="{
@@ -360,7 +360,7 @@ window.addEventListener('message', async (e) => {
           target="_blank"
           class="mt-4 cursor-pointer rounded-2xl p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg"
           :class="{
-            hidden: tab,
+            'hidden': status === 'online' && tab,
             'bg-slate-100 hover:shadow-slate-400':
               blockStatus.color === 'slate',
             'bg-blue-100 hover:shadow-blue-400': blockStatus.color === 'blue',
@@ -371,6 +371,45 @@ window.addEventListener('message', async (e) => {
         >
           {{ blockStatus.buttonText }}
         </button>
+      </div>
+      <div>
+        <div class="mt-12 text-lg font-bold mb-2">
+          바로가기
+        </div>
+      </div>
+      <div class="flex gap-4 mb-4">
+        <a
+          href="https://tgd.kr/s/naseongkim"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
+        ><i class="icon xi-twitch xi-2x" />김나성 트위치</a>
+        <a
+          href="https://tgd.kr/s/naseongkim"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
+        ><i class="icon xi-speech xi-2x" />김나성 트게더</a>
+      </div>
+      <div class="flex gap-4 mb-4">
+        <a
+          href="https://www.youtube.com/@Naseongkim"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-orange-500 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-600"
+        ><i class="icon xi-play-circle-o xi-2x" />김나성 유튜브</a>
+        <a
+          href="https://www.youtube.com/channel/UCxbWbdvNz3VCTVumDIc0XrA"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-sky-400 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-sky-500"
+        ><i class="icon xi-snooze xi-2x" />긴나성</a>
+      </div>
+      <div class="flex gap-4">
+        <a
+          href="https://www.youtube.com/channel/UCfLvxrf3KoKpUG0bBHIZJ-g"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-500 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-slate-600"
+        ><i class="icon xi-fast-forward xi-2x" />딥나성</a>
+        <div
+          class="w-1/2 h-32 rounded-3xl bg-slate-100"
+        />
       </div>
     </div>
     <div
