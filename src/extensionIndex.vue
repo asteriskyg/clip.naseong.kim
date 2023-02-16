@@ -291,18 +291,18 @@ window.addEventListener('message', async (e) => {
             <a
               :href="`${VITE_HOST_URL}/profile/${me?.twitchUserId}`"
               target="_blank"
-              class="mt-6 cursor-pointer rounded-2xl bg-slate-300 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
+              class="mt-6 cursor-pointer rounded-3xl bg-slate-300 text-center p-4 text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
             >내 프로필 보기
             </a>
             <button
-              class="mt-2 cursor-pointer rounded-2xl bg-red-200 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
+              class="mt-2 cursor-pointer rounded-3xl bg-red-200 p-4 text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
               @click="logout"
             >
               로그아웃
             </button>
           </div>
-          <div class="pt-2 text-center text-sm text-slate-500">
-            확장 프로그램 버전 2.1.0
+          <div class="pt-2 text-sm text-center text-slate-500">
+            확장 프로그램 버전 2.2.0
           </div>
         </div>
       </div>
@@ -358,7 +358,7 @@ window.addEventListener('message', async (e) => {
         <button
           v-if="blockStatus.button"
           target="_blank"
-          class="mt-4 cursor-pointer rounded-2xl p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg"
+          class="mt-4 cursor-pointer rounded-2xl p-4 text-base no-underline transition-all duration-300 hover:shadow-lg"
           :class="{
             'hidden': status === 'online' && tab,
             'bg-slate-100 hover:shadow-slate-400':
@@ -372,44 +372,72 @@ window.addEventListener('message', async (e) => {
           {{ blockStatus.buttonText }}
         </button>
       </div>
-      <div>
-        <div class="mt-12 text-lg font-bold mb-2">
-          바로가기
-        </div>
+      <div class="mt-8 text-lg font-bold mb-1">
+        바로가기
       </div>
-      <div class="flex gap-4 mb-4">
+      <div class="flex gap-3">
+        <a
+          href="https://app.twip.kr/donate/naseongkim"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-rose-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-rose-600"
+        ><i class="icon xi-heart xi-2x" />방송 후원하기</a>
         <a
           href="https://tgd.kr/s/naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
-        ><i class="icon xi-twitch xi-2x" />김나성 트위치</a>
-        <a
-          href="https://tgd.kr/s/naseongkim"
-          target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
-        ><i class="icon xi-speech xi-2x" />김나성 트게더</a>
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600"
+        ><i class="icon xi-speech xi-2x" />트게더</a>
       </div>
-      <div class="flex gap-4 mb-4">
+      <div class="mt-4 text-lg font-bold mb-1">
+        유튜브
+      </div>
+      <div class="flex gap-3 mb-3">
         <a
           href="https://www.youtube.com/@Naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-orange-500 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-600"
-        ><i class="icon xi-play-circle-o xi-2x" />김나성 유튜브</a>
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-orange-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-600"
+        ><i class="icon xi-play-circle-o xi-2x" />김나성</a>
         <a
           href="https://www.youtube.com/channel/UCxbWbdvNz3VCTVumDIc0XrA"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-sky-400 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-sky-500"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-sky-400 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-sky-500"
         ><i class="icon xi-snooze xi-2x" />긴나성</a>
       </div>
-      <div class="flex gap-4">
+      <div class="flex gap-3">
         <a
           href="https://www.youtube.com/channel/UCfLvxrf3KoKpUG0bBHIZJ-g"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-500 p-5 text-center text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-slate-600"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-600 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-slate-700"
         ><i class="icon xi-fast-forward xi-2x" />딥나성</a>
         <div
           class="w-1/2 h-32 rounded-3xl bg-slate-100"
         />
+      </div>
+      <div class="mt-4 text-lg font-bold mb-1">
+        다른 링크
+      </div>
+      <div class="flex gap-3 mb-3">
+        <a
+          href="https://bit.ly/3QeyGNd"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-red-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-red-600"
+        ><i class="icon xi-calendar xi-2x" />! 일정</a>
+        <a
+          href="https://bit.ly/2N1X9Gp"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-green-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-green-600"
+        ><i class="icon xi-truck xi-2x" />! 과금</a>
+      </div>
+      <div class="flex gap-3">
+        <a
+          href="https://ssakdook.twip.kr/command/naseongkim"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-pink-200 p-5 text-base text-black transition-all duration-300 hover:shadow-lg hover:shadow-pink-300"
+        ><i class="icon xi-scissors xi-2x" />! 명령어</a>
+        <a
+          href="https://bit.ly/3QeyGNd"
+          target="_blank"
+          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-100 p-5 text-base text-slate-100 hover:text-black transition-all duration-300 hover:shadow-lg hover:hover-slate-200"
+        ><i class="icon xi-ban xi-2x" />출입금지</a>
       </div>
     </div>
     <div
@@ -420,7 +448,7 @@ window.addEventListener('message', async (e) => {
       <a
         :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
         target="_blank"
-        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
+        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
       >트위치로 로그인</a>
     </div>
     <div
@@ -428,7 +456,7 @@ window.addEventListener('message', async (e) => {
       class="fixed bottom-0 left-1/2 flex w-full max-w-sm -translate-x-1/2 bg-white/30 p-5 backdrop-blur-md"
     >
       <button
-        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-center text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60 disabled:cursor-not-allowed disabled:bg-[#9146ff]/30 disabled:hover:shadow-none"
+        class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60 disabled:cursor-not-allowed disabled:bg-[#9146ff]/30 disabled:hover:shadow-none"
         @click="createClip"
       >
         클립 만들기
