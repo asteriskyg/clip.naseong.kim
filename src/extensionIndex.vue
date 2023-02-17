@@ -36,6 +36,12 @@ interface StreamInfo {
   is_mature: boolean;
 }
 
+interface Clip {
+  clipId: string;
+  broadcastTitle: string;
+  clipName: string;
+}
+
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -47,7 +53,7 @@ const modal = ref(false);
 const status = ref('loading');
 const clipName = ref('');
 const tab = ref(false);
-let clipId: string;
+const clip = ref<Clip>();
 
 onMounted(async () => {
   me.value = await auth.whoami();
@@ -174,7 +180,7 @@ async function buttonAction() {
     if (clipName.value) {
       const updateClipName = await (
         await axios.post(`${VITE_API_URL}/editClip`, {
-          id: clipId,
+          id: clip.value?.clipId,
           name: clipName.value,
         })
       ).data;
@@ -186,14 +192,14 @@ async function buttonAction() {
 
       status.value = 'edit';
     } else {
-      window.open(`${VITE_HOST_URL}/detail/${clipId}`);
+      window.open(`${VITE_HOST_URL}/detail/${clip.value?.clipName}`);
     }
   } else if (status.value === 'edit') {
-    window.open(`${VITE_HOST_URL}/detail/${clipId}`);
+    window.open(`${VITE_HOST_URL}/detail/${clip.value?.clipName}`);
   } else if (status.value === 'editFailed') {
     const updateClipName = await (
       await axios.post(`${VITE_API_URL}/editClip`, {
-        id: clipId,
+        id: clip.value?.clipId,
         name: clipName.value,
       })
     ).data;
@@ -215,7 +221,7 @@ async function buttonAction() {
   } else if (status.value === 'criticalFetch') {
     window.open('https://twitch.tv/naseongkim');
   } else if (status.value === 'criticalEdit') {
-    window.open(`${VITE_HOST_URL}/detail/${clipId}`);
+    window.open(`${VITE_HOST_URL}/detail/${clip.value?.clipName}`);
   } else if (status.value === 'createFailed') {
     (await createClip())
       ? (status.value = 'success')
@@ -232,7 +238,7 @@ async function createClip() {
     return false;
   }
 
-  clipId = createClip.clipId;
+  clip.value = createClip;
   status.value = 'success';
 }
 

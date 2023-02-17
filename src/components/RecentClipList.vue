@@ -4,7 +4,7 @@
       <a
         v-for="item in recentClipLists"
         :key="item.contentId"
-        :href="`/detail/${item.contentId}`"
+        :href="`/detail/${item.clipName}`"
         class="min-w-fit overflow-hidden rounded-lg border bg-white transition-shadow duration-300 hover:shadow-2xl"
       >
         <div class="relative first-letter:aspect-w-16 aspect-h-9">
@@ -68,6 +68,7 @@ interface Clip {
   creatorName: string;
   gameId: number;
   streamStartedAt: Date;
+  clipName: string;
   __v: number;
   _id: string;
 }

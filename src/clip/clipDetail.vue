@@ -127,9 +127,9 @@
           />
         </div>
       </div>
-      <div class="flex flex-col items-start justify-between p-6 md:flex-row">
+      <div class="flex flex-col items-start justify-between p-6 md:flex-row gap-6">
         <div>
-          <div class="mb-1 text-xl line-clamp-2 sm:text-2xl">
+          <div class="mb-1 text-xl line-clamp-1 sm:text-2xl">
             {{ clip.contentName }}
           </div>
           <div>
@@ -143,7 +143,7 @@
             {{ timeFromStream }}
           </div>
         </div>
-        <div class="flex gap-3">
+        <div class="flex shrink-0 gap-3">
           <button
             v-if="!clipUrl && clip.creatorId === me?.twitchUserId"
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
@@ -214,6 +214,7 @@ interface Clip {
   gameId: number;
   streamStartedAt: Date;
   clipDuration: number;
+  clipName: string;
 }
 
 interface ClipUrl {

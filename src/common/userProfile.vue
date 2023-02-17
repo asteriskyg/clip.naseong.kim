@@ -122,8 +122,8 @@
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <a
           v-for="item in clips"
-          :key="item.contentId"
-          :href="`/detail/${item.contentId}`"
+          :key="item.clipName"
+          :href="`/detail/${item.clipName}`"
           class="min-w-fit overflow-hidden rounded-lg border bg-white transition-shadow duration-300 hover:shadow-2xl"
         >
           <div class="relative aspect-w-16 aspect-h-9">
@@ -200,6 +200,7 @@ interface Clips {
   creatorName: string;
   gameId: number;
   streamStartedAt: Date;
+  clipName: string;
   __v: number;
   _id: string;
 }
