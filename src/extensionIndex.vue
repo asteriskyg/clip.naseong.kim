@@ -337,7 +337,7 @@ function hideBanner() {
             </button>
           </div>
           <div class="pt-2 text-center text-sm text-slate-500">
-            확장 프로그램 버전 2.2.0
+            확장 프로그램 버전 2.3.0
           </div>
         </div>
       </div>
