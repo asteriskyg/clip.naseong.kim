@@ -134,8 +134,8 @@
           </div>
           <div>
             <span class="text-gray-500">방송일자: </span>
-            {{ dayjs(clip.clipCreatedAt).format("YYYY년 MM월 DD일") }} ({{
-              dayjs().locale("ko").to(dayjs(clip.clipCreatedAt))
+            {{ dayjs(clip.streamStartedAt).format("YYYY년 MM월 DD일") }} ({{
+              dayjs().locale("ko").to(dayjs(clip.streamStartedAt))
             }})
           </div>
           <div>
