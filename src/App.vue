@@ -3,6 +3,7 @@ import Header from './components/layouts/HeaderLayout.vue';
 import Footer from './components/layouts/FooterLayout.vue';
 import './components/ChannelTalk.js';
 import { computed } from 'vue';
+import axios from 'axios';
 
 const isExtension = computed(() => {
   if (window.location.pathname === '/extension' || window.location.pathname === '/get') {
@@ -17,6 +18,8 @@ const isExtension = computed(() => {
     return false;
   }
 });
+
+axios.get('https://naseong.kim/get');
 </script>
 <template>
   <div class="min-h-full min-w-full">
