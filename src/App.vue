@@ -5,7 +5,7 @@ import './components/ChannelTalk.js';
 import { computed } from 'vue';
 
 const isExtension = computed(() => {
-  if (window.location.pathname === '/extension') {
+  if (window.location.pathname === '/extension' || window.location.pathname === '/get') {
     return true;
   } else {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

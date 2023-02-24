@@ -4,6 +4,7 @@ import { useAuthStore } from './stores/auth';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { useRoute } from 'vue-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
@@ -45,6 +46,7 @@ interface Clip {
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
+const route = useRoute();
 const auth = useAuthStore();
 const loginStatus = ref(true);
 const me = ref<Me | undefined | null>();
@@ -54,8 +56,27 @@ const status = ref('loading');
 const clipName = ref('');
 const tab = ref(false);
 const clip = ref<Clip>();
+const banner = ref(true);
 
 onMounted(async () => {
+  const local = localStorage.getItem('banner');
+
+  if (!local) {
+    const obj = {
+      banner: 'true',
+      expires: undefined,
+    };
+    localStorage.setItem('banner', JSON.stringify(obj));
+  } else {
+    const status = JSON.parse(local).banner;
+    const expires = JSON.parse(local).expires;
+    console.log(status, expires, Date.now(), expires > Date.now());
+
+    if (status === false && expires > Date.now()) {
+      banner.value = false;
+    }
+  }
+
   me.value = await auth.whoami();
 
   if (!me.value) {
@@ -72,7 +93,9 @@ onMounted(async () => {
         : (status.value = 'error');
   }
 
-  if (status.value === 'online') { window.postMessage({ status: 'online' }, VITE_HOST_URL); }
+  if (status.value === 'online') {
+    window.postMessage({ status: 'online' }, VITE_HOST_URL);
+  }
 });
 
 const blockStatus = computed(() => {
@@ -252,17 +275,23 @@ window.addEventListener('message', async (e) => {
   if (e.data.status === 'online' || e.data.window) {
     tab.value = true;
   } else {
-    e.data.devtoolsEnabled
-      ? tab.value = true
-      : tab.value = false;
+    e.data.devtoolsEnabled ? (tab.value = true) : (tab.value = false);
   }
 });
+
+function hideBanner() {
+  const obj = {
+    banner: false,
+    expires: new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
+  };
+
+  localStorage.setItem('banner', JSON.stringify(obj));
+  banner.value = false;
+}
 </script>
 <template>
   <div>
-    <div
-      class="w-full border-b bg-slate-100/50 backdrop-blur-lg"
-    >
+    <div class="w-full border-b bg-slate-100/50 backdrop-blur-lg">
       <div class="m-auto w-full max-w-sm px-6 py-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center text-3xl">
@@ -297,7 +326,7 @@ window.addEventListener('message', async (e) => {
             <a
               :href="`${VITE_HOST_URL}/profile/${me?.twitchUserId}`"
               target="_blank"
-              class="mt-6 cursor-pointer rounded-3xl bg-slate-300 text-center p-4 text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
+              class="mt-6 cursor-pointer rounded-3xl bg-slate-300 p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
             >내 프로필 보기
             </a>
             <button
@@ -307,13 +336,45 @@ window.addEventListener('message', async (e) => {
               로그아웃
             </button>
           </div>
-          <div class="pt-2 text-sm text-center text-slate-500">
+          <div class="pt-2 text-center text-sm text-slate-500">
             확장 프로그램 버전 2.2.0
           </div>
         </div>
       </div>
+      <div
+        class="flex-col items-center gap-2 border-t bg-slate-50/30 p-3"
+        :class="{
+          hidden: route.path === '/extension' || banner === false,
+          'hidden md:flex': route.path === '/get' && banner === true,
+        }"
+      >
+        <div
+          class="flex flex-col flex-wrap items-center justify-center gap-3 text-center"
+        >
+          <div>
+            컴퓨터로 보고 계신가요?<br>확장프로그램으로 더 편리하게
+            이용해보세요.
+          </div>
+          <div class="flex gap-3 text-sm">
+            <a
+              target="_blank"
+              href="https://chrome.google.com/webstore/detail/pccdeccoompikgkmcepmnmlggefjilfm"
+              class="flex items-center justify-center gap-1 rounded-xl bg-blue-500 px-3 py-2 text-white transition-colors hover:bg-blue-600"
+            >
+              다운받기
+            </a>
+            <button
+              href="https://chrome.google.com/webstore/detail/pccdeccoompikgkmcepmnmlggefjilfm"
+              class="flex items-center justify-center gap-1 rounded-xl bg-slate-200 px-3 py-2 text-slate-400 transition-colors hover:bg-slate-300 hover:text-slate-500"
+              @click="hideBanner"
+            >
+              7일간 보지 않기
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="m-auto flex max-w-sm flex-col p-5 mb-24">
+    <div class="m-auto mb-24 flex max-w-sm flex-col p-5">
       <div
         class="flex flex-col rounded-3xl p-5"
         :class="{
@@ -366,11 +427,12 @@ window.addEventListener('message', async (e) => {
           target="_blank"
           class="mt-4 cursor-pointer rounded-2xl p-4 text-base no-underline transition-all duration-300 hover:shadow-lg"
           :class="{
-            'hidden': status === 'online' && tab,
+            hidden: status === 'online' && tab,
             'bg-slate-100 hover:shadow-slate-400':
               blockStatus.color === 'slate',
             'bg-blue-100 hover:shadow-blue-400': blockStatus.color === 'blue',
-            'bg-green-100 hover:shadow-green-400': blockStatus.color === 'green',
+            'bg-green-100 hover:shadow-green-400':
+              blockStatus.color === 'green',
             'bg-red-100 hover:shadow-red-400': blockStatus.color === 'red',
           }"
           @click="buttonAction"
@@ -378,71 +440,69 @@ window.addEventListener('message', async (e) => {
           {{ blockStatus.buttonText }}
         </button>
       </div>
-      <div class="mt-8 text-lg font-bold mb-1">
+      <div class="mt-8 mb-1 text-lg font-bold">
         바로가기
       </div>
       <div class="flex gap-3">
         <a
           href="https://app.twip.kr/donate/naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-rose-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-rose-600"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-rose-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-rose-600"
         ><i class="icon xi-heart xi-2x" />방송 후원하기</a>
         <a
           href="https://tgd.kr/s/naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-[#9146ff] p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-[#9146ff] p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600"
         ><i class="icon xi-speech xi-2x" />트게더</a>
       </div>
-      <div class="mt-4 text-lg font-bold mb-1">
+      <div class="mt-4 mb-1 text-lg font-bold">
         유튜브
       </div>
-      <div class="flex gap-3 mb-3">
+      <div class="mb-3 flex gap-3">
         <a
           href="https://www.youtube.com/@Naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-orange-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-600"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-orange-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-600"
         ><i class="icon xi-play-circle-o xi-2x" />김나성</a>
         <a
           href="https://www.youtube.com/channel/UCxbWbdvNz3VCTVumDIc0XrA"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-sky-400 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-sky-500"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-sky-400 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-sky-500"
         ><i class="icon xi-snooze xi-2x" />긴나성</a>
       </div>
       <div class="flex gap-3">
         <a
           href="https://www.youtube.com/channel/UCfLvxrf3KoKpUG0bBHIZJ-g"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-600 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-slate-700"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-slate-600 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-slate-700"
         ><i class="icon xi-fast-forward xi-2x" />딥나성</a>
-        <div
-          class="w-1/2 h-32 rounded-3xl bg-slate-100"
-        />
+        <div class="h-32 w-1/2 rounded-3xl bg-slate-100" />
       </div>
-      <div class="mt-4 text-lg font-bold mb-1">
+      <div class="mt-4 mb-1 text-lg font-bold">
         다른 링크
       </div>
-      <div class="flex gap-3 mb-3">
+      <div class="mb-3 flex gap-3">
         <a
           href="https://bit.ly/3QeyGNd"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-red-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-red-600"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-red-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-red-600"
         ><i class="icon xi-calendar xi-2x" />! 일정</a>
         <a
           href="https://bit.ly/2N1X9Gp"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-green-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-green-600"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-green-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-green-600"
         ><i class="icon xi-truck xi-2x" />! 과금</a>
       </div>
       <div class="flex gap-3">
         <a
           href="https://ssakdook.twip.kr/command/naseongkim"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-pink-200 p-5 text-base text-black transition-all duration-300 hover:shadow-lg hover:shadow-pink-300"
+          class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-pink-200 p-5 text-base text-black transition-all duration-300 hover:shadow-lg hover:shadow-pink-300"
         ><i class="icon xi-scissors xi-2x" />! 명령어</a>
         <a
           href="https://bit.ly/3QeyGNd"
           target="_blank"
-          class="flex flex-col w-1/2 h-32 justify-between cursor-pointer items-start rounded-3xl bg-slate-100 p-5 text-base text-slate-100 hover:text-black transition-all duration-300 hover:shadow-lg hover:hover-slate-200"
+          class="hover:hover-slate-200 flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-slate-100 p-5 text-base text-slate-100 transition-all duration-300 hover:text-black hover:shadow-lg"
         ><i class="icon xi-ban xi-2x" />출입금지</a>
       </div>
     </div>

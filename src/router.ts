@@ -9,6 +9,10 @@ const routes: RouteRecordRaw[] = [
     component: async () => await import('./extensionIndex.vue'),
   },
   {
+    path: '/get',
+    component: async () => await import('./extensionIndex.vue'),
+  },
+  {
     path: '/authorization',
     component: async () => await import('./common/getAuthority.vue'),
   },
