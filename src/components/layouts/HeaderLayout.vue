@@ -1,8 +1,71 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useAuthStore } from '../../stores/auth';
+import axios from 'axios';
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+
+interface Me {
+  displayName: string;
+  email: string;
+  profileImageUrl: string;
+  profileBackgroundUrl: string;
+  twitchUserId: number;
+  userType: string;
+  follow: Date | undefined;
+  subscription: number | undefined;
+}
+
+interface StreamInfo {
+  id: number;
+  user_id: number;
+  user_login: string;
+  user_name: string;
+  game_id: number;
+  game_name: string;
+  type: string;
+  title: string;
+  viewer_count: number;
+  started_at: Date;
+  language: string;
+  thumbnail_url: string;
+  tag_ids: string[];
+  tags: string[];
+  is_mature: boolean;
+}
+
+const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+
+const auth = useAuthStore();
+const loginStatus = ref(true);
+const me = ref<Me | undefined>();
+const streamInfo = ref<StreamInfo | undefined>();
+const modal = ref(false);
+
+onMounted(async () => {
+  streamInfo.value = await auth.getStreamInfo();
+  me.value = await auth.whoami();
+  me.value
+    ? (loginStatus.value = true)
+    : window.location.pathname === '/authorization'
+      ? (loginStatus.value = true)
+      : (loginStatus.value = false);
+});
+
+async function logout() {
+  await axios.get(`${VITE_API_URL}/logout`);
+  window.location.href = '/';
+}
+</script>
 <template>
   <div
     class="sticky top-0 z-10 w-full border-b bg-slate-100/50 backdrop-blur-lg"
   >
-    <div class="m-auto w-full max-w-7xl px-6 py-6">
+    <div class="m-auto w-full max-w-7xl p-6 h-auto sm:h-[88px]">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
           <a
@@ -103,7 +166,7 @@
         >로그인</a>
       </div>
       <div
-        class="relative mt-6 w-full max-w-sm rounded-3xl border bg-white p-6"
+        class="relative mt-6 sm:mt-3 w-full max-w-xs rounded-3xl border bg-white p-6 sm:shadow-xl"
         :class="{ hidden: !modal }"
       >
         <div class="mb-6 flex items-center justify-between">
@@ -164,70 +227,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useAuthStore } from '../../stores/auth';
-import axios from 'axios';
-import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
-
-interface Me {
-  displayName: string;
-  email: string;
-  profileImageUrl: string;
-  profileBackgroundUrl: string;
-  twitchUserId: number;
-  userType: string;
-  follow: Date | undefined;
-  subscription: number | undefined;
-}
-
-interface StreamInfo {
-  id: number;
-  user_id: number;
-  user_login: string;
-  user_name: string;
-  game_id: number;
-  game_name: string;
-  type: string;
-  title: string;
-  viewer_count: number;
-  started_at: Date;
-  language: string;
-  thumbnail_url: string;
-  tag_ids: string[];
-  tags: string[];
-  is_mature: boolean;
-}
-
-const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
-const VITE_API_URL = import.meta.env.VITE_API_URL;
-
-const auth = useAuthStore();
-const loginStatus = ref(true);
-const me = ref<Me | undefined>();
-const streamInfo = ref<StreamInfo | undefined>();
-const modal = ref(false);
-
-onMounted(async () => {
-  me.value = await auth.whoami();
-  me.value
-    ? (loginStatus.value = true)
-    : window.location.pathname === '/authorization'
-      ? (loginStatus.value = true)
-      : (loginStatus.value = false);
-
-  if (loginStatus.value === true) {
-    streamInfo.value = await auth.getStreamInfo();
-  }
-});
-
-async function logout() {
-  await axios.get(`${VITE_API_URL}/logout`);
-  window.location.href = '/';
-}
-</script>

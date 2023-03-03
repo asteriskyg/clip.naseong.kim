@@ -68,16 +68,7 @@ export const useAuthStore = defineStore('auth', {
         const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
         return (this.streamInfo = response.data?.data[0]);
       } catch {
-        try {
-          if (!await auth.refreshAuthority()) {
-            return (this.streamInfo = null);
-          }
-
-          const response = await axios.get(`${VITE_API_URL}/getStreamInfo`);
-          return (this.streamInfo = response.data?.data[0]);
-        } catch {
-          return (this.streamInfo = null);
-        }
+        return (this.streamInfo = null);
       }
     },
   },

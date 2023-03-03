@@ -4,7 +4,6 @@ import { useAuthStore } from './stores/auth';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import { useRoute } from 'vue-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
@@ -46,7 +45,6 @@ interface Clip {
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-const route = useRoute();
 const auth = useAuthStore();
 const loginStatus = ref(true);
 const me = ref<Me | undefined | null>();
@@ -76,7 +74,8 @@ onMounted(async () => {
       banner.value = false;
     }
   }
-
+  window.postMessage({ status: 'online' }, VITE_HOST_URL);
+  streamInfo.value = await auth.getStreamInfo();
   me.value = await auth.whoami();
 
   if (!me.value) {
@@ -84,18 +83,11 @@ onMounted(async () => {
     status.value = 'login';
   }
 
-  if (loginStatus.value === true) {
-    streamInfo.value = await auth.getStreamInfo();
-    streamInfo.value
-      ? (status.value = 'online')
-      : streamInfo.value === undefined
-        ? (status.value = 'offline')
-        : (status.value = 'error');
-  }
-
-  if (status.value === 'online') {
-    window.postMessage({ status: 'online' }, VITE_HOST_URL);
-  }
+  streamInfo.value
+    ? (status.value = 'online')
+    : streamInfo.value === undefined
+      ? (status.value = 'offline')
+      : (status.value = 'error');
 });
 
 const blockStatus = computed(() => {
@@ -326,11 +318,11 @@ function hideBanner() {
             <a
               :href="`${VITE_HOST_URL}/profile/${me?.twitchUserId}`"
               target="_blank"
-              class="mt-6 cursor-pointer rounded-3xl bg-slate-300 p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
+              class="mt-6 cursor-pointer rounded-2xl bg-slate-300 p-4 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400"
             >내 프로필 보기
             </a>
             <button
-              class="mt-2 cursor-pointer rounded-3xl bg-red-200 p-4 text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
+              class="mt-2 cursor-pointer rounded-2xl bg-red-200 p-4 text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
               @click="logout"
             >
               로그아웃
@@ -342,10 +334,9 @@ function hideBanner() {
         </div>
       </div>
       <div
-        class="flex-col items-center gap-2 border-t bg-slate-50/30 p-3"
+        class="hidden flex-col items-center gap-2 border-t bg-slate-50/30 p-3"
         :class="{
-          hidden: route.path === '/extension' || banner === false,
-          'hidden md:flex': route.path === '/get' && banner === true,
+          'md:flex': banner === true,
         }"
       >
         <div
@@ -486,19 +477,19 @@ function hideBanner() {
           href="https://bit.ly/3QeyGNd"
           target="_blank"
           class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-red-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-red-600"
-        ><i class="icon xi-calendar xi-2x" />! 일정</a>
+        ><i class="icon xi-calendar xi-2x" />!일정</a>
         <a
           href="https://bit.ly/2N1X9Gp"
           target="_blank"
           class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-green-500 p-5 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-green-600"
-        ><i class="icon xi-truck xi-2x" />! 과금</a>
+        ><i class="icon xi-truck xi-2x" />!과금</a>
       </div>
       <div class="flex gap-3">
         <a
           href="https://ssakdook.twip.kr/command/naseongkim"
           target="_blank"
           class="flex h-32 w-1/2 cursor-pointer flex-col items-start justify-between rounded-3xl bg-pink-200 p-5 text-base text-black transition-all duration-300 hover:shadow-lg hover:shadow-pink-300"
-        ><i class="icon xi-scissors xi-2x" />! 명령어</a>
+        ><i class="icon xi-scissors xi-2x" />!명령어</a>
         <a
           href="https://bit.ly/3QeyGNd"
           target="_blank"
@@ -515,10 +506,10 @@ function hideBanner() {
         :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization?type=extension&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
         target="_blank"
         class="flex w-full cursor-pointer items-center justify-center rounded-3xl bg-[#9146ff] p-4 text-base text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/60"
-      >트위치로 로그인</a>
+      >로그인 하고 클립 만들기</a>
     </div>
     <div
-      v-if="status === 'online' && tab"
+      v-if="status === 'online' && tab && loginStatus"
       class="fixed bottom-0 left-1/2 flex w-full max-w-sm -translate-x-1/2 bg-white/30 p-5 backdrop-blur-md"
     >
       <button
