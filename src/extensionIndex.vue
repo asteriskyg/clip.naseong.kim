@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from './stores/auth';
+import { useAuth } from './plugins/useAuth';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
@@ -45,7 +46,8 @@ interface Clip {
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-const auth = useAuthStore();
+const authStore = useAuthStore();
+const auth = useAuth();
 const loginStatus = ref(true);
 const me = ref<Me | undefined | null>();
 const streamInfo = ref<StreamInfo | undefined>();
@@ -68,15 +70,14 @@ onMounted(async () => {
   } else {
     const status = JSON.parse(local).banner;
     const expires = JSON.parse(local).expires;
-    console.log(status, expires, Date.now(), expires > Date.now());
 
     if (status === false && expires > Date.now()) {
       banner.value = false;
     }
   }
   window.postMessage({ status: 'online' }, VITE_HOST_URL);
-  streamInfo.value = await auth.getStreamInfo();
-  me.value = await auth.whoami();
+  streamInfo.value = await authStore.getStreamInfo();
+  me.value = await authStore.whoami();
 
   if (!me.value) {
     loginStatus.value = false;
@@ -227,7 +228,7 @@ async function buttonAction() {
     status.value = 'edit';
   } else if (status.value === 'fetchFailed') {
     status.value = 'loading';
-    streamInfo.value = await auth.getStreamInfo();
+    streamInfo.value = await authStore.getStreamInfo();
     streamInfo.value
       ? (status.value = 'online')
       : streamInfo.value === undefined
@@ -246,7 +247,13 @@ async function buttonAction() {
 
 async function createClip() {
   status.value = 'create';
-  const createClip = await (await axios.get(`${VITE_API_URL}/createClip`)).data;
+  const createClip = await (await axios
+    .get(`${VITE_API_URL}/createClip`)
+    .catch(async () => {
+      await auth.refreshAuthority();
+      return await axios.get(`${VITE_API_URL}/createClip`);
+    })
+  ).data;
 
   if (!createClip) {
     status.value = 'createFailed';

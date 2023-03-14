@@ -47,18 +47,25 @@ const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
 
 onMounted(async () => {
-  streamInfo.value = await auth.getStreamInfo();
+  if (window.location.pathname === '/authorization') return;
   me.value = await auth.whoami();
+  streamInfo.value = await auth.getStreamInfo();
   me.value
     ? (loginStatus.value = true)
-    : window.location.pathname === '/authorization'
-      ? (loginStatus.value = true)
-      : (loginStatus.value = false);
+    : (loginStatus.value = false);
 });
 
 async function logout() {
-  await axios.get(`${VITE_API_URL}/logout`);
-  window.location.href = '/';
+  try {
+    await axios.get(`${VITE_API_URL}/logout`);
+    localStorage.removeItem('me');
+    window.location.href = '/';
+  } catch {
+    await axios.get(`${VITE_API_URL}/refresh`);
+    await axios.get(`${VITE_API_URL}/logout`);
+    localStorage.removeItem('me');
+    window.location.href = '/';
+  }
 }
 </script>
 <template>
