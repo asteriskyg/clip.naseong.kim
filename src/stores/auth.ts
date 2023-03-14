@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
 import axios from 'axios';
 import { useAuth } from '../plugins/useAuth';
@@ -38,25 +39,21 @@ interface StreamInfo {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     streamInfo: ref<StreamInfo | undefined | null>(),
-    me: ref<Me>(),
+    me: useStorage('me', {}),
   }),
   actions: {
     async whoami() {
-      if (this.me !== undefined) return this.me;
-
+      if (Object.keys(this.me).length !== 0) return this.me;
       try {
-        const response = await axios.get(`${VITE_API_URL}/whoami`);
-        return (this.me = response.data);
+        return (this.me = await (await axios.get(`${VITE_API_URL}/whoami`)).data);
       } catch {
         try {
           if (!await auth.refreshAuthority()) {
-            return (this.me = undefined);
+            return null;
           }
-
-          const response = await axios.get(`${VITE_API_URL}/whoami`);
-          return (this.me = response.data);
+          return (this.me = await (await axios.get(`${VITE_API_URL}/whoami`)).data);
         } catch {
-          return (this.me = undefined);
+          return null;
         }
       }
     },
