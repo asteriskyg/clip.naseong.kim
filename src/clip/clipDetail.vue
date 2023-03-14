@@ -7,24 +7,32 @@
       <div class="sm:p-6 sm:pb-0">
         <div
           v-if="!clipUrl"
-          class="sm:border sm:rounded-lg md:rounded-xl sm:overflow-hidden"
+          class="sm:overflow-hidden sm:rounded-lg sm:border md:rounded-xl"
           style="position: relative; padding-top: 56.25%"
         >
           <iframe
             :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${clip.contentId}/iframe?preload=true&loop=true&poster=https%3A%2F%2Fcustomer-lsoi5zwkd51of53g.cloudflarestream.com%2F${clip.contentId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`"
-            style="border: none;position: absolute;top: 0;left: 0;height: 100%;width: 100%;"
+            style="
+              border: none;
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 100%;
+            "
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowfullscreen="true"
           />
         </div>
         <div
           v-if="
-            (
-              (
-                dayjs().isBefore(dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm'))
-                || dayjs().isBefore(dayjs(clip.clipLastEdited).locale('ko').add(10, 'm'))
-              )
-              && !clipUrl)
+            (dayjs().isBefore(
+              dayjs(clip.clipCreatedAt).locale('ko').add(10, 'm')
+            ) ||
+              dayjs().isBefore(
+                dayjs(clip.clipLastEdited).locale('ko').add(10, 'm')
+              )) &&
+              !clipUrl
           "
           class="sm:text-md mx-6 mt-6 flex flex-wrap gap-x-1 rounded-2xl border border-orange-500 bg-orange-50 p-4 text-sm sm:mx-0 md:text-lg"
         >
@@ -96,8 +104,8 @@
             </button>
             <button
               :disabled="
-                clip.clipDuration === timecode[1] - timecode[0]
-                  && editClipName === ''
+                clip.clipDuration === timecode[1] - timecode[0] &&
+                  editClipName === ''
               "
               class="transiton-all rounded-2xl bg-blue-500 px-6 py-4 text-white duration-300 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:hover:bg-slate-200 sm:py-3 md:hover:bg-blue-600"
               @click="updateClip"
@@ -127,7 +135,9 @@
           />
         </div>
       </div>
-      <div class="flex flex-col items-start justify-between p-6 md:flex-row gap-6">
+      <div
+        class="flex flex-col items-start justify-between gap-6 p-6 md:flex-row"
+      >
         <div>
           <div class="mb-1 text-xl line-clamp-1 sm:text-2xl">
             {{ clip.contentName }}
@@ -158,6 +168,13 @@
           >
             클립 다운로드
           </button>
+          <button
+            v-if="!clipUrl && clip.creatorId === me?.twitchUserId || me?.userType !== 'viewer'"
+            class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-red-500 px-4 text-sm text-white duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-red-600"
+            @click="removeModal = !removeModal"
+          >
+            클립 삭제
+          </button>
         </div>
       </div>
       <a
@@ -177,6 +194,52 @@
           다른 클립 더보기
         </div>
         <RecentClipList />
+      </div>
+    </div>
+  </div>
+  <div
+    v-if="removeModal"
+    class="fixed top-0 left-0 w-screen h-screen bg-slate-500/30 z-20 backdrop-blur-xl"
+  >
+    <div class="absolute w-full sm:max-w-sm h-full sm:h-auto top-1/2 left-1/2 p-6 -translate-x-1/2 -translate-y-1/2 bg-white sm:rounded-3xl sm:shadow-2xl">
+      <div
+        class="rounded-2xl overflow-hidden mb-6"
+        style="position: relative; padding-top: 56.25%"
+      >
+        <iframe
+          v-if="clip"
+          :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${clip.contentId}/iframe?preload=true&loop=true&poster=https%3A%2F%2Fcustomer-lsoi5zwkd51of53g.cloudflarestream.com%2F${clip.contentId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`"
+          style="
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+          "
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"
+        />
+      </div>
+      <div class="text-xl mb-1">
+        이 클립을 삭제할까요?
+      </div>
+      <div class=" mb-12">
+        삭제한 클립은 다시 복구할 수 없어요.
+      </div>
+      <div class="flex justify-end gap-3">
+        <button
+          class="transition-colors duration-300 bg-gray-200 px-6 py-3 rounded-2xl hover:bg-gray-300"
+          @click="removeModal = !removeModal"
+        >
+          그만두기
+        </button>
+        <button
+          class="transition-colors duration-300 bg-red-500 px-6 py-3 rounded-2xl text-white hover:bg-red-600"
+          @click="removeClip"
+        >
+          삭제하기
+        </button>
       </div>
     </div>
   </div>
@@ -237,6 +300,7 @@ const editClipName = ref<string>('');
 const timecode = ref([0, 0]);
 const clipPercent = ref(0);
 const counter = ref(1);
+const removeModal = ref(false);
 
 watch(timecode, () => {
   if (!clip.value) {
@@ -329,22 +393,21 @@ const timeFromStream = computed(() => {
   }
 });
 
-function updateInput(event: Event) {
+const updateInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const updatedText = target.value;
   editClipName.value = updatedText;
-}
+};
 
-async function editClip() {
+const editClip = async () => {
   if (!clip.value) {
     return;
   }
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   isClipReady.value = false;
-  fetch();
-
-  async function fetch() {
+  const fetch = async () => {
     const response = (
       await axios
         .post(`${VITE_API_URL}/trimClip`, {
@@ -360,7 +423,8 @@ async function editClip() {
 
     clipPercent.value = response.percentComplete;
     return response;
-  }
+  };
+  fetch();
 
   while (clipPercent.value < 100) {
     await fetch();
@@ -376,14 +440,15 @@ async function editClip() {
 
   timecode.value[0] = 0;
   timecode.value[1] = clip.value.clipDuration;
-}
+};
 
-async function downloadClip() {
+const downloadClip = async () => {
   if (!clip.value) {
     return;
   }
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   isClipReady.value = false;
   fetch();
 
@@ -419,9 +484,9 @@ async function downloadClip() {
     isClipReady.value = true;
     clipPercent.value = 0;
   }
-}
+};
 
-async function loop() {
+const loop = () => {
   if (!trim.value) {
     return;
   }
@@ -429,9 +494,9 @@ async function loop() {
   if (trim.value.currentTime > timecode.value[1]) {
     trim.value.currentTime = timecode.value[0];
   }
-}
+};
 
-async function updateClip() {
+const updateClip = async () => {
   const updateResult = await axios
     .post(`${VITE_API_URL}/updateClip`, {
       id: clip.value?.contentId,
@@ -457,5 +522,24 @@ async function updateClip() {
   }
 
   window.location.href = `/detail/${updateResult.data}`;
-}
+};
+
+const removeClip = async () => {
+  await axios
+    .delete(`${VITE_API_URL}/removeClip`, {
+      headers: {
+        id: clip.value?.contentId,
+      },
+    })
+    .catch(async () => {
+      await auth.refreshAuthority();
+      return await axios.delete(`${VITE_API_URL}/removeClip`, {
+        headers: {
+          id: clip.value?.contentId,
+        },
+      });
+    });
+
+  window.location.href = '/';
+};
 </script>
