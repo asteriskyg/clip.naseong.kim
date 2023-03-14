@@ -144,8 +144,11 @@
             </div>
           </div>
           <div class="p-4">
-            <div class="mb-2 text-xl font-semibold line-clamp-1">
+            <div class="text-xl font-semibold line-clamp-1">
               {{ item.contentName }}
+            </div>
+            <div class="mb-3">
+              {{ item.gameName }}
             </div>
             <div style="overflow-wrap: anywhere">
               {{ dayjs().locale("ko").to(dayjs(item.clipCreatedAt)) }}
@@ -199,6 +202,7 @@ interface Clips {
   creatorId: number;
   creatorName: string;
   gameId: number;
+  gameName: string;
   streamStartedAt: Date;
   clipName: string;
   __v: number;

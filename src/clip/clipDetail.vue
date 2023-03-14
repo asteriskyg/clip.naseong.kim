@@ -142,6 +142,9 @@
           <div class="mb-1 text-xl line-clamp-1 sm:text-2xl">
             {{ clip.contentName }}
           </div>
+          <div class="mb-3">
+            {{ clip.gameName }}
+          </div>
           <div>
             <span class="text-gray-500">방송일자: </span>
             {{ dayjs(clip.streamStartedAt).format("YYYY년 MM월 DD일") }} ({{
@@ -275,6 +278,7 @@ interface Clip {
   creatorId: number;
   creatorName: string;
   gameId: number;
+  gameName: string;
   streamStartedAt: Date;
   clipDuration: number;
   clipName: string;
