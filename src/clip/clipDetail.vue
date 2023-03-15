@@ -139,7 +139,7 @@
         class="flex flex-col items-start justify-between gap-6 p-6 md:flex-row"
       >
         <div>
-          <div class="mb-1 text-xl line-clamp-1 sm:text-2xl">
+          <div class="text-xl line-clamp-1 sm:text-2xl">
             {{ clip.contentName }}
           </div>
           <div class="mb-3">
