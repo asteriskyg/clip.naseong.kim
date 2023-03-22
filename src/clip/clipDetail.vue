@@ -172,7 +172,7 @@
             클립 다운로드
           </button>
           <button
-            v-if="!clipUrl && clip.creatorId === me?.twitchUserId || me?.userType !== 'viewer'"
+            v-if="!clipUrl && clip.creatorId === me?.twitchUserId || me?.userType && me?.userType !== 'viewer'"
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-red-500 px-4 text-sm text-white duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-red-600"
             @click="removeModal = !removeModal"
           >
