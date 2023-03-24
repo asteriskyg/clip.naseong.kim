@@ -16,6 +16,7 @@ interface Me {
   userType: string;
   follow: Date | undefined;
   subscription: number | undefined;
+  exp: number;
 }
 
 interface StreamInfo {
@@ -43,15 +44,35 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async whoami() {
-      if (Object.keys(this.me).length !== 0) return this.me;
+      let object;
+      object = localStorage.getItem('me');
+
+      if (object === null) {
+        try {
+          if (!await auth.refreshAuthority()) return null;
+
+          const response = await (await axios.get(`${VITE_API_URL}/whoami`)).data;
+          response.exp = Date.now() + 1000 * 60 * 30;
+          return (this.me = response as Me);
+        } catch {
+          return null;
+        }
+      } else {
+        object = JSON.parse(object) as Me;
+      }
+
+      if (Date.now() < object.exp) return this.me;
       try {
-        return (this.me = await (await axios.get(`${VITE_API_URL}/whoami`)).data);
+        const response = await (await axios.get(`${VITE_API_URL}/whoami`)).data;
+        response.exp = Date.now() + 1000 * 60 * 30;
+        return (this.me = response);
       } catch {
         try {
-          if (!await auth.refreshAuthority()) {
-            return null;
-          }
-          return (this.me = await (await axios.get(`${VITE_API_URL}/whoami`)).data);
+          if (!await auth.refreshAuthority()) return null;
+
+          const response = await (await axios.get(`${VITE_API_URL}/whoami`)).data;
+          response.exp = Date.now() + 1000 * 60 * 30;
+          return (this.me = response);
         } catch {
           return null;
         }
