@@ -72,7 +72,7 @@ async function logout() {
   <div
     class="sticky top-0 z-10 w-full border-b bg-slate-50/90 backdrop-blur-lg"
   >
-    <div class="flex justify-center items-center w-full max-w-7xl px-6 h-16 sm:h-[88px]">
+    <div class="flex sm:relative m-auto justify-center items-center w-full max-w-7xl px-6 h-16 sm:h-[88px]">
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center gap-4">
           <a
@@ -169,11 +169,11 @@ async function logout() {
         <a
           v-if="!loginStatus"
           :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
-          class="rounded-full sm:bg-[#9146ff] text-[#9146ff] sm:text-white"
+          class="rounded-full sm:bg-[#9146ff] text-[#9146ff] sm:text-white sm:py-2 sm:px-4"
         >로그인</a>
       </div>
       <div
-        class="relative mt-6 sm:mt-3 w-full max-w-xs rounded-3xl border bg-white p-6 sm:shadow-xl"
+        class="absolute top-8 sm:top-16 left-6 mt-6 sm:mt-3 w-full max-w-xs rounded-3xl border bg-white p-6 sm:shadow-xl"
         :class="{ hidden: !modal }"
       >
         <div class="mb-6 flex items-center justify-between">
