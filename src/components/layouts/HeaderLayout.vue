@@ -70,14 +70,14 @@ async function logout() {
 </script>
 <template>
   <div
-    class="sticky top-0 z-10 w-full border-b bg-slate-100/50 backdrop-blur-lg"
+    class="sticky top-0 z-10 w-full border-b bg-slate-50/90 backdrop-blur-lg"
   >
-    <div class="m-auto w-full max-w-7xl p-6 h-auto sm:h-[88px]">
-      <div class="flex items-center justify-between">
+    <div class="flex justify-center items-center w-full max-w-7xl px-6 h-16 sm:h-[88px]">
+      <div class="flex items-center justify-between w-full">
         <div class="flex items-center gap-4">
           <a
             href="/"
-            class="text-3xl"
+            class="text-2xl sm:text-3xl"
           > na.<b>clip</b></a>
           <button
             v-if="streamInfo"
@@ -89,11 +89,11 @@ async function logout() {
         </div>
         <div v-if="me">
           <Menu>
-            <div class="relative h-10 w-10">
+            <div class="relative w-8 h-8 sm:h-10 sm:w-10">
               <MenuButton>
                 <img
                   :src="me.profileImageUrl"
-                  class="h-10 w-10 rounded-full border"
+                  class="rounded-full border"
                   alt=""
                 >
               </MenuButton>
@@ -169,7 +169,7 @@ async function logout() {
         <a
           v-if="!loginStatus"
           :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
-          class="rounded-full bg-[#9146ff] py-2 px-4 text-white"
+          class="rounded-full sm:bg-[#9146ff] text-[#9146ff] sm:text-white"
         >로그인</a>
       </div>
       <div
@@ -216,19 +216,6 @@ async function logout() {
             class="mt-2 w-full cursor-pointer rounded-2xl bg-blue-100 p-3 text-center text-base no-underline transition-all duration-300 hover:shadow-lg hover:shadow-blue-400"
           >방송 바로가기
           </a>
-        </div>
-      </div>
-    </div>
-    <div class="flex flex-col items-center gap-2 border-t bg-slate-50/30 p-3">
-      <div class="flex flex-wrap justify-center gap-1 text-sm">
-        <div>나클립은 베타 테스트 중이에요.</div>
-        <div class="flex items-center justify-center gap-1">
-          버그 제보, 의견 보내기는 오른쪽 아래 채널톡을 이용해주세요.
-          <img
-            class="h-5 sm:ml-1"
-            src="https://static-cdn.jtvnw.net/emoticons/v2/302045542/default/dark/1.0"
-            alt="보노따봉"
-          >
         </div>
       </div>
     </div>
