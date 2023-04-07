@@ -16,42 +16,42 @@ import StreamStauts from './StreamStatus.vue';
         <a
           href="/get"
           target="_blank"
-          class="flex shrink-0 cursor-pointer items-center justify-center rounded-3xl bg-blue-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-blue-400 lg:mr-3 lg:px-6 lg:py-0"
+          class="flex shrink-0 cursor-pointer items-center justify-center rounded-3xl bg-blue-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-blue-400 lg:mr-3 lg:px-6 lg:py-0"
         >
           클립 만들기
         </a>
         <a
           href="https://twitch.tv/naseongkim"
           target="_blank"
-          class="flex cursor-pointer items-center justify-center rounded-3xl bg-purple-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-400 lg:px-6 lg:py-0"
+          class="flex cursor-pointer items-center justify-center rounded-3xl bg-purple-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-purple-400 lg:px-6 lg:py-0"
         >
           트위치
         </a>
         <a
           href="https://tgd.kr/s/naseongkim"
           target="_blank"
-          class="flex cursor-pointer items-center justify-center rounded-3xl bg-purple-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-purple-400 lg:mr-3 lg:px-6 lg:py-0"
+          class="flex cursor-pointer items-center justify-center rounded-3xl bg-purple-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-purple-400 lg:mr-3 lg:px-6 lg:py-0"
         >
           트게더
         </a>
         <a
           href="https://www.youtube.com/@Naseongkim"
           target="_blank"
-          class="hover:shadow-oragne-400 flex cursor-pointer items-center justify-center rounded-3xl bg-orange-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg lg:px-6 lg:py-0"
+          class="hover:shadow-oragne-400 flex cursor-pointer items-center justify-center rounded-3xl bg-orange-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-orange-400 lg:px-6 lg:py-0"
         >
           김나성
         </a>
         <a
           href="https://www.youtube.com/@ginnaseong"
           target="_blank"
-          class="flex cursor-pointer items-center justify-center rounded-3xl bg-sky-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-sky-400 lg:px-6 lg:py-0"
+          class="flex cursor-pointer items-center justify-center rounded-3xl bg-sky-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-sky-400 lg:px-6 lg:py-0"
         >
           긴나성
         </a>
         <a
           href="https://www.youtube.com/@Deepnaseong"
           target="_blank"
-          class="flex cursor-pointer items-center justify-center rounded-3xl bg-slate-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg hover:shadow-slate-400 lg:px-6 lg:py-0"
+          class="flex cursor-pointer items-center justify-center rounded-3xl bg-slate-500 px-4 py-2 text-white no-underline transition-all duration-300 hover:shadow-lg md:hover:shadow-slate-400 lg:px-6 lg:py-0"
         >
           딥나성
         </a>
