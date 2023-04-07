@@ -180,7 +180,7 @@ async function buttonAction() {
     if (clipName.value) {
       const updateClipName = await (
         await axios.post(`${VITE_API_URL}/editClip`, {
-          id: clip.value?.clipId,
+          id: clip.value?.clipName,
           name: clipName.value,
         })
       ).data;
@@ -199,7 +199,7 @@ async function buttonAction() {
   } else if (status.value === 'editFailed') {
     const updateClipName = await (
       await axios.post(`${VITE_API_URL}/editClip`, {
-        id: clip.value?.clipId,
+        id: clip.value?.clipName,
         name: clipName.value,
       })
     ).data;

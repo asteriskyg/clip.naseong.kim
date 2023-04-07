@@ -425,7 +425,7 @@ const editClip = async () => {
         .catch(async () => {
           await auth.refreshAuthority();
           return await axios.post(`${VITE_API_URL}/trimClip`, {
-            id: clip.value?.contentId,
+            id: clip.value?.clipName,
           });
         })
     ).data;
