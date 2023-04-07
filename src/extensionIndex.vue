@@ -55,7 +55,6 @@ const me = ref<Me | undefined | null>();
 const streamInfo = ref<StreamInfo | undefined>();
 const status = ref('loading');
 const clipName = ref('');
-const tab = ref(false);
 const clip = ref<Clip>();
 
 onMounted(async () => {
@@ -247,15 +246,6 @@ async function createClip() {
   clip.value = createClip;
   status.value = 'success';
 }
-
-window.addEventListener('message', async (e) => {
-  if (e.origin !== VITE_HOST_URL) return;
-  if (e.data.status === 'online' || e.data.window) {
-    tab.value = true;
-  } else {
-    e.data.devtoolsEnabled ? (tab.value = true) : (tab.value = false);
-  }
-});
 </script>
 <template>
   <div>
@@ -314,7 +304,6 @@ window.addEventListener('message', async (e) => {
           target="_blank"
           class="mt-4 cursor-pointer rounded-3xl p-4 text-base no-underline transition-all duration-300 hover:shadow-lg"
           :class="{
-            hidden: status === 'online' && tab,
             'bg-slate-100 hover:shadow-slate-400':
               blockStatus.color === 'slate',
             'bg-blue-100 hover:shadow-blue-400': blockStatus.color === 'blue',
@@ -420,7 +409,7 @@ window.addEventListener('message', async (e) => {
       >로그인 하고 클립 만들기</a>
     </div>
     <div
-      v-if="status === 'online' && tab && loginStatus"
+      v-if="status === 'online' && loginStatus"
       class="fixed bottom-0 left-1/2 flex w-full max-w-sm -translate-x-1/2 bg-white/30 p-5 backdrop-blur-md"
     >
       <button
