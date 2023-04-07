@@ -45,15 +45,12 @@ onMounted(async () => {
       'bg-slate-50': !streamInfo,
     }"
   >
-    <div
-      v-if="streamInfo"
-      class="mb-6 flex justify-between"
-    >
-      <span>지금 방송 중!</span>
-      <span>{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</span>
-    </div>
-    <div
-      class="line-clamp-1 flex items-end text-xl font-semibold md:line-clamp-2"
+    <span
+      class="line-clamp-1 font-semibold"
+      :class="{
+        'text-2xl': streamInfo,
+        'text-xl': !streamInfo,
+      }"
     >
       {{
         status === "online"
@@ -64,12 +61,12 @@ onMounted(async () => {
               ? "방송 정보 없음"
               : "불러오는 중"
       }}
-    </div>
-    <div
-      v-if="streamInfo"
-      class="line-clamp-1"
-    >
-      {{ streamInfo?.game_name }}
+    </span>
+    <div v-if="streamInfo">
+      <div class="line-clamp-1">
+        {{ streamInfo?.game_name }}
+      </div>
+      <div>{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</div>
     </div>
   </div>
 </template>
