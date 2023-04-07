@@ -43,7 +43,7 @@
           v-if="clipUrl"
           class="border-b pb-6"
         >
-          <div class="aspect-w-16 aspect-h-9 h-0 w-full">
+          <div class="aspect-w-16 aspect-h-9 w-full">
             <video
               ref="trim"
               class="w-full"
