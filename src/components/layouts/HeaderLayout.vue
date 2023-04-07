@@ -6,6 +6,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRoute } from 'vue-router';
 dayjs.extend(relativeTime);
 
 interface Me {
@@ -40,6 +41,7 @@ interface StreamInfo {
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
+const route = useRoute();
 const auth = useAuthStore();
 const loginStatus = ref(true);
 const me = ref<Me | undefined>();
@@ -47,12 +49,10 @@ const streamInfo = ref<StreamInfo | undefined>();
 const modal = ref(false);
 
 onMounted(async () => {
-  if (window.location.pathname === '/authorization') return;
+  if (route.path === '/authorization') return;
   me.value = await auth.whoami();
   streamInfo.value = await auth.getStreamInfo();
-  me.value
-    ? (loginStatus.value = true)
-    : (loginStatus.value = false);
+  me.value ? (loginStatus.value = true) : (loginStatus.value = false);
 });
 
 async function logout() {
@@ -72,8 +72,10 @@ async function logout() {
   <div
     class="sticky top-0 z-10 w-full border-b bg-slate-50/90 backdrop-blur-lg"
   >
-    <div class="flex sm:relative m-auto justify-center items-center w-full max-w-7xl px-6 h-16 sm:h-[88px]">
-      <div class="flex items-center justify-between w-full">
+    <div
+      class="m-auto flex h-16 w-full max-w-7xl items-center justify-center px-6 sm:relative sm:h-[88px]"
+    >
+      <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-4">
           <a
             href="/"
@@ -82,6 +84,7 @@ async function logout() {
           <button
             v-if="streamInfo"
             class="select-none rounded-full bg-red-500 px-4 py-1 text-sm text-white shadow-lg shadow-red-600"
+            :class="{ 'lg:hidden': route.path === '/' }"
             @click="modal = !modal"
           >
             LIVE
@@ -89,7 +92,7 @@ async function logout() {
         </div>
         <div v-if="me">
           <Menu>
-            <div class="relative w-8 h-8 sm:h-10 sm:w-10">
+            <div class="relative h-8 w-8 sm:h-10 sm:w-10">
               <MenuButton>
                 <img
                   :src="me.profileImageUrl"
@@ -100,7 +103,7 @@ async function logout() {
               <MenuItems
                 class="absolute right-0 z-10 flex w-48 flex-col overflow-hidden rounded-xl border bg-white shadow-2xl"
               >
-                <div class="border-b px-4 pt-3 pb-2">
+                <div class="border-b px-4 pb-2 pt-3">
                   <div class="text-sm">
                     로그인 된 계정
                   </div>
@@ -169,11 +172,11 @@ async function logout() {
         <a
           v-if="!loginStatus"
           :href="`https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`"
-          class="rounded-full sm:bg-[#9146ff] text-[#9146ff] sm:text-white sm:py-2 sm:px-4"
+          class="text-[#9146ff] sm:rounded-full sm:bg-[#9146ff] sm:px-4 sm:py-2 sm:text-white"
         >로그인</a>
       </div>
       <div
-        class="absolute top-8 sm:top-16 left-6 mt-6 sm:mt-3 w-full max-w-xs rounded-3xl border bg-white p-6 sm:shadow-xl"
+        class="absolute left-6 top-8 mt-6 w-full max-w-xs rounded-3xl border bg-white p-6 sm:top-16 sm:mt-3 sm:shadow-xl"
         :class="{ hidden: !modal }"
       >
         <div class="mb-6 flex items-center justify-between">
@@ -195,7 +198,7 @@ async function logout() {
             </svg>
           </button>
         </div>
-        <div class="text-xl font-semibold line-clamp-2">
+        <div class="line-clamp-2 text-xl font-semibold">
           {{ streamInfo?.title }}
         </div>
         <div class="mb-2 line-clamp-1">
