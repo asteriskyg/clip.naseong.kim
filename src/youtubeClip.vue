@@ -265,10 +265,11 @@ const buttonAction = async () => {
     <ExtensionHeader />
     <ExtensionAd />
     <div class="m-auto mb-24 flex max-w-sm flex-col p-5">
-      <span class="mb-3 font-semibold hover:underline underline-offset-4 hover:text-blue-500">
+      <span class="mb-3">
         <a
           href="/extension"
           target="_self"
+          class="font-semibold hover:underline underline-offset-4 hover:text-blue-500"
         >← 돌아가기</a>
       </span>
       <div
