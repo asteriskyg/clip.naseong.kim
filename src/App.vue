@@ -6,7 +6,7 @@ import { computed } from 'vue';
 
 const isExtension = computed(() => {
   const path = window.location.pathname;
-  if (path === '/extension' || path === '/get') {
+  if (path === '/extension' || path === '/get' || path === '/youtube') {
     return true;
   } else {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

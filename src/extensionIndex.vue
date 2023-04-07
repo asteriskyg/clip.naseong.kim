@@ -327,6 +327,21 @@ window.addEventListener('message', async (e) => {
           {{ blockStatus.buttonText }}
         </button>
       </div>
+      <div class="flex flex-col mt-8 bg-slate-200 p-5 rounded-3xl text-white">
+        <div class="flex justify-between items-center">
+          <div class="px-3 py-1 bg-red-500 rounded-full text-sm mb-3">
+            NEW!
+          </div>
+        </div>
+        <div class="text-black text-lg mb-6">
+          긴나성, 딥나성 다시보기에서<br>클립을 만들어 보세요.
+        </div>
+        <a
+          href="/youtube"
+          target="_self"
+          class="flex justify-center rounded-3xl bg-red-500 p-4 text-base text-white transition-all duration-300 hover:shadow-lg hover:shadow-red-400"
+        >바로가기</a>
+      </div>
       <div class="mt-8 mb-1 text-lg font-bold">
         바로가기
       </div>

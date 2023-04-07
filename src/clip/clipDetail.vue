@@ -151,10 +151,15 @@
               dayjs().locale("ko").to(dayjs(clip.streamStartedAt))
             }})
           </div>
-          <div>
+          <div v-if="clip.gameId !== 999">
             <span class="text-gray-500">타임스탬프: </span>
             {{ timeFromStream }}
           </div>
+          <a
+            v-else
+            :href="`https://www.youtube.com/clip/${clip.clipName}`"
+            class="transiton-all duration-300 text-red-500 underline hover:text-red-700"
+          >유튜브에서 보기</a>
         </div>
         <div class="flex shrink-0 gap-3">
           <button
@@ -162,21 +167,21 @@
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
             @click="editClip"
           >
-            클립 수정
+            수정
           </button>
           <button
             v-if="!clipUrl && me && me?.userType !== 'viewer'"
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-slate-200 px-4 text-sm text-black duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-blue-500 md:hover:text-white"
             @click="downloadClip"
           >
-            클립 다운로드
+            다운로드
           </button>
           <button
             v-if="!clipUrl && clip.creatorId === me?.twitchUserId || me?.userType && me?.userType !== 'viewer'"
             class="sm:text-md transiton-all mt-6 h-11 rounded-2xl bg-red-500 px-4 text-sm text-white duration-300 md:mt-0 md:h-12 md:px-5 md:hover:bg-red-600"
             @click="removeModal = !removeModal"
           >
-            클립 삭제
+            삭제
           </button>
         </div>
       </div>
