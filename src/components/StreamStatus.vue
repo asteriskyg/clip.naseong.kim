@@ -41,7 +41,7 @@ onMounted(async () => {
   <div
     class="hidden w-full max-w-xs flex-col justify-between rounded-3xl border bg-white p-6 transition-all duration-300 lg:flex"
     :class="{
-      'lg:shadow-xl': streamInfo,
+      'border-blue-500 lg:shadow-xl lg:shadow-blue-200': streamInfo,
       'bg-slate-50': !streamInfo,
     }"
   >
