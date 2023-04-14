@@ -84,8 +84,8 @@ const logout = async () => {
             로그아웃
           </button>
         </div>
-        <div class="pt-2 text-center text-sm text-slate-500">
-          확장 프로그램 버전 3.0.0
+        <div class="pt-3 text-center text-sm text-slate-500">
+          nsk-clipper 버전 3.0.0
         </div>
       </div>
     </div>
