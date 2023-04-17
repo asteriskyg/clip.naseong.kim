@@ -18,8 +18,12 @@
             >
               {{
                 item.clipDuration > 59
-                  ? `1:${item.clipDuration - 60}`
-                  : `0:${item.clipDuration}`
+                  ? item.clipDuration - 60 < 10
+                    ? `1:0${item.clipDuration - 60}`
+                    : `1:${item.clipDuration - 60}`
+                  : item.clipDuration < 10
+                    ? `0:0${item.clipDuration}`
+                    : `0:${item.clipDuration}`
               }}
             </div>
           </div>
