@@ -50,7 +50,7 @@
     >
       <button
         class="rounded-full bg-gray-200 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 md:hover:bg-blue-500"
-        @click="loadMore"
+        @click="more"
       >
         더보기
       </button>
@@ -59,6 +59,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
@@ -81,21 +82,40 @@ interface Clip {
   _id: string;
 }
 
+const props = defineProps<{
+  get: string;
+}>();
+
 const VITE_API_URL = import.meta.env.VITE_API_URL;
-const recentClipLists = ref<Clip[]>([]);
+const route = useRoute();
+const recentClipLists = ref<Clip[]>();
 const clipIndex = ref(1);
 
 onMounted(async () => {
-  recentClipLists.value = (
-    await axios.get(`${VITE_API_URL}/getRecentClip`)
-  ).data;
+  if (props.get === 'recent') {
+    recentClipLists.value = (
+      await axios.get(`${VITE_API_URL}/clip/recent`)
+    ).data;
+  } else if (props.get === 'user') {
+    recentClipLists.value = (
+      await axios.get(`${VITE_API_URL}/clip/user?id=${route.params.id}`)
+    ).data;
+  }
 });
 
-async function loadMore() {
-  const clipLists = await axios.get(
-    `${VITE_API_URL}/getRecentClip?offset=${clipIndex.value}`,
-  );
+const more = async () => {
+  if (props.get === 'recent') {
+    const clipLists = await axios.get(
+      `${VITE_API_URL}/clip/recent?offset=${clipIndex.value}`,
+    );
+    recentClipLists.value = recentClipLists.value?.concat(clipLists.data);
+  } else if (props.get === 'user') {
+    const clipLists = await axios.get(
+      `${VITE_API_URL}/clip/user?id=${route.params.id}&offset=${clipIndex.value}`,
+    );
+    recentClipLists.value = recentClipLists.value?.concat(clipLists.data);
+  }
+
   clipIndex.value = clipIndex.value + 1;
-  recentClipLists.value = recentClipLists.value.concat(clipLists.data);
-}
+};
 </script>
