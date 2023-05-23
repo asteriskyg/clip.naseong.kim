@@ -2,30 +2,21 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../../stores/auth';
 import axios from 'axios';
-
-interface Me {
-  displayName: string;
-  email: string;
-  profileImageUrl: string;
-  profileBackgroundUrl: string;
-  twitchUserId: number;
-  userType: string;
-  follow: Date | undefined;
-  subscription: number | undefined;
-}
+import { useRoute } from 'vue-router';
 
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-const authStore = useAuthStore();
+const route = useRoute();
+const store = useAuthStore();
 const loginStatus = ref(true);
-const me = ref<Me | undefined | null>();
+const me = ref<typeof store.me>();
 const modal = ref(false);
 const status = ref('loading');
 
 onMounted(async () => {
   window.postMessage({ status: 'online' }, VITE_HOST_URL);
-  me.value = await authStore.whoami();
+  me.value = await store.whoami();
 
   if (!me.value) {
     loginStatus.value = false;
@@ -34,8 +25,8 @@ onMounted(async () => {
 });
 
 const logout = async () => {
-  await axios.get(`${VITE_API_URL}/logout`);
-  window.location.href = '/extension';
+  await axios.get(`${VITE_API_URL}/auth/logout`);
+  window.location.href = route.path;
 };
 </script>
 <template>
@@ -85,7 +76,7 @@ const logout = async () => {
           </button>
         </div>
         <div class="pt-3 text-center text-sm text-slate-500">
-          nsk-clipper 버전 3.0.0
+          nsk-clipper 버전 4.0.0
         </div>
       </div>
     </div>

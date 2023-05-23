@@ -9,80 +9,51 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useRoute } from 'vue-router';
 dayjs.extend(relativeTime);
 
-interface Me {
-  displayName: string;
-  email: string;
-  profileImageUrl: string;
-  profileBackgroundUrl: string;
-  twitchUserId: number;
-  userType: string;
-  follow: Date | undefined;
-  subscription: number | undefined;
-}
-
-interface StreamInfo {
-  id: number;
-  user_id: number;
-  user_login: string;
-  user_name: string;
-  game_id: number;
-  game_name: string;
-  type: string;
-  title: string;
-  viewer_count: number;
-  started_at: Date;
-  language: string;
-  thumbnail_url: string;
-  tag_ids: string[];
-  tags: string[];
-  is_mature: boolean;
-}
-
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const route = useRoute();
-const auth = useAuthStore();
+const store = useAuthStore();
 const loginStatus = ref(true);
-const me = ref<Me | undefined>();
-const streamInfo = ref<StreamInfo | undefined>();
+const me = ref<typeof store.me>();
+const streamInfo = ref<typeof store.streamInfo>();
 const modal = ref(false);
 
 onMounted(async () => {
   if (route.path === '/authorization') return;
-  me.value = await auth.whoami();
-  streamInfo.value = await auth.getStreamInfo();
+  me.value = await store.whoami();
+  streamInfo.value = await store.getStreamInfo();
   me.value ? (loginStatus.value = true) : (loginStatus.value = false);
 });
 
-async function logout() {
+const logout = async () => {
   try {
-    await axios.get(`${VITE_API_URL}/logout`);
+    await axios.get(`${VITE_API_URL}/auth/logout`);
     localStorage.removeItem('me');
     window.location.href = '/';
   } catch {
-    await axios.get(`${VITE_API_URL}/refresh`);
-    await axios.get(`${VITE_API_URL}/logout`);
+    await axios.get(`${VITE_API_URL}/auth/refresh`);
+    await axios.get(`${VITE_API_URL}/auth/logout`);
     localStorage.removeItem('me');
     window.location.href = '/';
   }
-}
+};
 </script>
 <template>
   <div
-    class="sticky top-0 z-10 w-full border-b bg-slate-50/90 backdrop-blur-lg"
+    class="sticky top-0 z-10 w-full border-b dark:border-neutral-600 bg-slate-50/90 dark:bg-neutral-800/90 backdrop-blur-lg transition-all duration-300 ease-in-out"
   >
     <div
-      class="m-auto flex h-16 w-full max-w-7xl items-center justify-center px-6 sm:relative sm:h-[88px]"
+      class="max-w-7xl m-auto flex h-16 w-full items-center justify-center px-6"
     >
       <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-4">
           <a
             href="/"
-            class="text-2xl sm:text-3xl"
+            class="text-2xl"
           > na.<b>clip</b></a>
           <button
-            v-if="streamInfo"
+            v-if="streamInfo?.status === 'online'"
             class="select-none rounded-full bg-red-500 px-4 py-1 text-sm text-white shadow-lg shadow-red-600"
             :class="{ 'lg:hidden': route.path === '/' }"
             @click="modal = !modal"
@@ -92,7 +63,7 @@ async function logout() {
         </div>
         <div v-if="me">
           <Menu>
-            <div class="relative h-8 w-8 sm:h-10 sm:w-10">
+            <div class="relative h-8 w-8">
               <MenuButton>
                 <img
                   :src="me.profileImageUrl"

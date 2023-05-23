@@ -1,75 +1,8 @@
-<template>
-  <div class="p-6 md:p-0">
-    <div class="mb-4 text-2xl font-bold">
-      {{ props.title }}
-    </div>
-    <div v-if="recentClipLists">
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <a
-          v-for="item in recentClipLists"
-          :key="item.contentId"
-          :href="`/detail/${item.clipName}`"
-          class="min-w-fit overflow-hidden rounded-lg border bg-white transition-shadow duration-300 hover:shadow-2xl"
-        >
-          <div class="relative first-letter:aspect-w-16 aspect-h-9">
-            <div>
-              <img
-                :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${item.contentId}/thumbnails/thumbnail.jpg`"
-                alt=""
-              >
-              <div
-                class="absolute bottom-2 right-2 flex h-7 w-12 items-center justify-center rounded-lg bg-black/20 text-sm text-white backdrop-blur-sm"
-              >
-                {{
-                  item.clipDuration > 59
-                    ? item.clipDuration - 60 < 10
-                      ? `1:0${item.clipDuration - 60}`
-                      : `1:${item.clipDuration - 60}`
-                    : item.clipDuration < 10
-                      ? `0:0${item.clipDuration}`
-                      : `0:${item.clipDuration}`
-                }}
-              </div>
-            </div>
-          </div>
-          <div class="p-4">
-            <div class="text-xl font-semibold line-clamp-1">
-              {{ item.contentName }}
-            </div>
-            <div class="mb-3">
-              {{ item.gameName }}
-            </div>
-            <div style="overflow-wrap: anywhere">
-              {{ item.creatorName }}
-            </div>
-            <div style="overflow-wrap: anywhere">
-              {{ dayjs().locale("ko").to(dayjs(item.clipCreatedAt)) }}
-            </div>
-          </div>
-        </a>
-      </div>
-      <div
-        v-if="recentClipLists.length - clipIndex * 12 === 0"
-        class="mt-6 flex w-full items-center justify-center"
-      >
-        <button
-          class="rounded-full bg-gray-200 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 md:hover:bg-blue-500"
-          @click="more"
-        >
-          더보기
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
+import ClipItem from './ClipItem.vue';
 
 interface Clip {
   clipCreatedAt: Date;
@@ -125,3 +58,28 @@ const more = async () => {
   clipIndex.value = clipIndex.value + 1;
 };
 </script>
+<template>
+  <div class="mb-4 text-2xl font-bold">
+    {{ props.title }}
+  </div>
+  <div v-if="recentClipLists">
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 4xl:grid-cols-5">
+      <ClipItem
+        v-for="item in recentClipLists"
+        :key="item.contentId"
+        :item="item"
+      />
+    </div>
+    <div
+      v-if="recentClipLists.length - clipIndex * 12 === 0"
+      class="mt-6 flex w-full items-center justify-center"
+    >
+      <button
+        class="rounded-full bg-slate-200 dark:bg-neutral-700 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 hover:bg-blue-500 hover:dark:bg-blue-900"
+        @click="more"
+      >
+        더보기
+      </button>
+    </div>
+  </div>
+</template>

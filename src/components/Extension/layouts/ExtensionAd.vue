@@ -5,15 +5,11 @@ const banner = ref(true);
 
 onMounted(() => {
   const local = localStorage.getItem('banner');
-
-  if (!local) {
-    localStorage.setItem('banner', '');
-  } else {
-    if (Number(local) > Date.now()) banner.value = false;
-  }
+  if (!local) localStorage.setItem('banner', '');
+  if (Date.now() < Number(local)) banner.value = false;
 });
 
-const hideBanner = () => {
+const hide = () => {
   localStorage.setItem('banner', (Date.now() + (1000 * 60 * 60 * 24 * 7)).toString());
   banner.value = false;
 };
@@ -36,7 +32,7 @@ const hideBanner = () => {
         <button
           href="https://chrome.google.com/webstore/detail/pccdeccoompikgkmcepmnmlggefjilfm"
           class="w-1/2 text-center rounded-2xl bg-slate-200 p-3 text-slate-400 transition-colors hover:bg-slate-300 hover:text-slate-500"
-          @click="hideBanner"
+          @click="hide"
         >
           7일간 보지 않기
         </button>

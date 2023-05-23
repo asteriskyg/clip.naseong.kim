@@ -6,43 +6,19 @@ import 'dayjs/locale/ko';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
-interface StreamInfo {
-  id: number;
-  user_id: number;
-  user_login: string;
-  user_name: string;
-  game_id: number;
-  game_name: string;
-  type: string;
-  title: string;
-  viewer_count: number;
-  started_at: Date;
-  language: string;
-  thumbnail_url: string;
-  tag_ids: string[];
-  tags: string[];
-  is_mature: boolean;
-}
-
-const auth = useAuthStore();
-const streamInfo = ref<StreamInfo | undefined>();
-const status = ref('loading');
+const authStore = useAuthStore();
+const streamInfo = ref<typeof authStore.streamInfo>();
 
 onMounted(async () => {
-  streamInfo.value = await auth.getStreamInfo();
-  streamInfo.value
-    ? (status.value = 'online')
-    : streamInfo.value === undefined
-      ? (status.value = 'offline')
-      : (status.value = 'error');
+  streamInfo.value = await authStore.getStreamInfo();
 });
 </script>
 <template>
   <div
     class="hidden w-full max-w-xs flex-col justify-between rounded-3xl border bg-white p-6 transition-all duration-300 lg:flex"
     :class="{
-      'border-blue-500 lg:shadow-xl lg:shadow-blue-200': streamInfo,
-      'bg-slate-50': !streamInfo,
+      'border-blue-500 lg:shadow-xl lg:shadow-blue-200': streamInfo?.status === 'online',
+      'bg-slate-50': streamInfo?.status !== 'online',
     }"
   >
     <span
@@ -53,16 +29,16 @@ onMounted(async () => {
       }"
     >
       {{
-        status === "online"
+        streamInfo?.status === "online"
           ? streamInfo?.title
-          : status === "offline"
+          : streamInfo?.status === "offline"
             ? "오프라인"
-            : status === "error"
+            : streamInfo?.status === "unknown"
               ? "방송 정보 없음"
               : "불러오는 중"
       }}
     </span>
-    <div v-if="streamInfo">
+    <div v-if="streamInfo?.status === 'online'">
       <div class="line-clamp-1">
         {{ streamInfo?.game_name }}
       </div>
