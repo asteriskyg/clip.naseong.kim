@@ -140,7 +140,7 @@ const deleteBg = async () => {
           :class="{
             'bg-green-500 shadow-green-600': user?.subscription === 1000,
             'bg-red-500 shadow-red-600': user?.subscription === 2000,
-            'bg-purple-500 shadow-purple-600': user?.subscription === 3000,
+            'bg-twitch-purple shadow-purple-600': user?.subscription === 3000,
           }"
         >
           {{ tier }} 구독자

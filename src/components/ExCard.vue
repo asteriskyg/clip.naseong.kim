@@ -66,7 +66,7 @@ const btnColor = computed(() => {
   } else if (props.color.btn === 'orange') {
     return 'bg-orange-500 hover:bg-orange-600 disabled:hover:bg-orange-500 hover:shadow-orange-500 text-white';
   } else if (props.color.btn === 'purple') {
-    return 'bg-purple-500 hover:bg-purple-600 disabled:hover:bg-purple-500 hover:shadow-purple-500 text-white';
+    return 'bg-twitch-purple hover:bg-violet-600 disabled:hover:bg-bg-violet-400 hover:shadow-violet-500 text-white';
   } else {
     return '';
   }

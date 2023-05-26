@@ -34,7 +34,7 @@ const bg = computed(() => {
   } else if (props.bg === 'rose') {
     return 'bg-rose-500 hover:shadow-rose-400';
   } else if (props.bg === 'purple') {
-    return 'bg-purple-500 hover:shadow-purple-400';
+    return 'bg-twitch-purple hover:shadow-violet-400';
   } else if (props.bg === 'pink') {
     return 'bg-pink-500 hover:shadow-pink-400';
   } else if (props.bg === 'sky') {
