@@ -117,7 +117,7 @@ const deleteBg = async () => {
       class="group relative overflow-hidden md:mb-16 md:rounded-2xl md:shadow-2xl lg:mb-24"
     >
       <div
-        class="flex h-36 items-start justify-end gap-2 border-b bg-slate-100 p-6 sm:h-52 md:h-64 lg:h-72"
+        class="flex h-36 items-start justify-end gap-2 border-b dark:border-neutral-600 bg-slate-100 p-6 sm:h-52 md:h-64 lg:h-72"
         :class="{
           pattern: !user?.profileBackgroundUrl,
           bg: user?.profileBackgroundUrl,
@@ -130,7 +130,7 @@ const deleteBg = async () => {
       >
         <div
           v-if="user?.follow && user.userType !== 'streamer'"
-          class="flex h-9 items-center justify-center rounded-full bg-green-500 px-4 text-sm text-white shadow-lg shadow-green-600"
+          class="flex h-9 items-center justify-center rounded-full bg-green-500 dark:bg-green-800 px-4 text-sm text-white shadow-lg shadow-green-600 dark:shadow-green-800"
         >
           {{ dayjs().diff(dayjs(user?.follow), "M") }}개월 팔로우 중
         </div>
@@ -138,9 +138,9 @@ const deleteBg = async () => {
           v-if="user?.subscription && user.userType !== 'streamer'"
           class="flex h-9 items-center justify-center rounded-full px-4 text-sm text-white shadow-lg"
           :class="{
-            'bg-green-500 shadow-green-600': user?.subscription === 1000,
-            'bg-red-500 shadow-red-600': user?.subscription === 2000,
-            'bg-twitch-purple shadow-purple-600': user?.subscription === 3000,
+            'bg-green-500 dark:bg-green-800 shadow-green-600 dark:shadow-green-800': user?.subscription === 1000,
+            'bg-red-500 dark:bg-red-800 shadow-red-600 dark:shadow-red-800': user?.subscription === 2000,
+            'bg-twitch-purple dark:bg-violet-800 shadow-purple-600 dark:shadow-violet-800': user?.subscription === 3000,
           }"
         >
           {{ tier }} 구독자
@@ -149,9 +149,9 @@ const deleteBg = async () => {
           v-if="user?.userType !== 'viewer'"
           class="flex h-9 items-center justify-center rounded-full px-4 text-sm text-white shadow-lg"
           :class="{
-            'bg-orange-500 shadow-orange-600': user?.userType === 'streamer',
-            'bg-green-500 shadow-green-600': user?.userType === 'editor',
-            'bg-blue-500 shadow-blue-600': user?.userType === 'developer',
+            'bg-orange-500 dark:bg-orange-800 shadow-orange-600 dark:shadow-orange-800': user?.userType === 'streamer',
+            'bg-green-500 dark:bg-green-800 shadow-green-600 dark:shadow-green-800': user?.userType === 'viewer',
+            'bg-blue-500 dark:bg-blue-800 shadow-blue-600 dark:shadow-blue-800': user?.userType === 'developer',
           }"
         >
           {{
@@ -166,7 +166,7 @@ const deleteBg = async () => {
         </div>
         <button
           v-if="user?.twitchUserId === me?.twitchUserId"
-          class="absolute bottom-20 mb-2 -mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/30 text-black backdrop-blur-xl hover:bg-white/70 group-hover:flex md:mb-6 md:mr-0 md:hidden md:h-12 md:w-12 md:rounded-2xl"
+          class="absolute bottom-20 mb-2 -mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/30 dark:bg-neutral-800/30 text-black dark:text-white backdrop-blur-xl hover:bg-white/70 group-hover:flex md:mb-6 md:mr-0 md:hidden md:h-12 md:w-12 md:rounded-2xl"
           @click="modal = !modal"
         >
           <i class="xi-image-o xi-x" />
@@ -177,64 +177,66 @@ const deleteBg = async () => {
           @close="modal = !modal"
         >
           <DialogPanel
-            class="h-full w-full max-w-[512px] border bg-white p-6 sm:h-auto sm:rounded-2xl"
+            class="h-full w-full max-w-[512px] bg-white dark:bg-twitch-dark p-6 sm:h-auto sm:rounded-2xl text-black dark:text-neutral-200"
           >
-            <DialogTitle class="mb-6 text-2xl font-bold">
+            <DialogTitle class="mb-6 text-2xl">
               프로필 배경 바꾸기
             </DialogTitle>
             <div class="mb-2">
-              어떤 이미지로 변경할까요?
+              어떤 이미지로 바꿀까요?
             </div>
             <input
               ref="profileBgInput"
-              class="mb-12 w-full rounded-2xl bg-slate-200 px-4 py-3"
+              class="mb-12 w-full rounded-2xl bg-slate-100 dark:bg-neutral-700 p-4"
               type="file"
               accept="image/png, image/jpeg"
             >
             <div class="flex justify-end gap-3">
               <button
-                class="rounded-2xl bg-slate-200 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
-                @click="modal = !modal"
-              >
-                그만두기
-              </button>
-              <button
-                class="rounded-2xl bg-slate-200 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
                 @click="deleteBg"
               >
-                기본값
+                기본값으로 되돌리기
               </button>
               <button
-                class="rounded-2xl bg-blue-500 px-4 py-3 text-white transition-all duration-300 md:hover:shadow-lg md:hover:shadow-blue-600"
+                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                @click="modal = !modal"
+              >
+                취소
+              </button>
+              <button
+                class="rounded-2xl bg-blue-500 dark:bg-blue-800 dark:hover:bg-blue-700 px-4 py-3 text-white transition-all duration-300 md:hover:shadow-lg md:hover:shadow-blue-600"
                 @click="uploadBg"
               >
-                바꾸기
+                변경
               </button>
             </div>
           </DialogPanel>
         </Dialog>
       </div>
       <div
-        class="bottom-0 flex w-full flex-col bg-slate-100/70 px-6 pb-6 backdrop-blur-lg md:absolute"
+        class="bottom-0 flex w-full flex-col bg-slate-100/70 dark:bg-neutral-800/70 px-6 pb-6 backdrop-blur-lg md:absolute border-t dark:border-neutral-600"
       >
         <div class="h-6 w-full">
           <img
             v-if="user?.profileBackgroundUrl"
-            class="h-20 w-20 -translate-y-1/2 overflow-hidden rounded-full border bg-white p-1 sm:h-24 sm:w-24"
+            class="h-20 w-20 -translate-y-1/2 overflow-hidden rounded-full border dark:border-neutral-600 bg-white dark:bg-neutral-800 sm:h-24 sm:w-24"
             :src="user.profileImageUrl"
             alt=""
           >
         </div>
-        <div class="text-right text-xl md:text-2xl lg:text-3xl">
+        <div class="text-right text-xl md:text-2xl lg:text-3xl text-dark dark:text-slate-200">
           {{ user?.displayName }}
         </div>
       </div>
     </div>
-    <RecentClipList
-      v-if="user?.displayName"
-      :title="`${ user.displayName }님의 클립`"
-      :get="'user'"
-    />
+    <div class="p-6 md:p-0">
+      <RecentClipList
+        v-if="user?.displayName"
+        :title="`${ user.displayName }님의 클립`"
+        :get="'user'"
+      />
+    </div>
   </div>
 </template>
 <style>

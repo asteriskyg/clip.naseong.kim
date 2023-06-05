@@ -27,15 +27,15 @@ const props = defineProps<{
 <template>
   <a
     :href="`/detail/${props.item.clipName}`"
-    class="min-w-fit overflow-hidden rounded-lg border bg-white dark:border-neutral-600 dark:bg-neutral-800 duration-300 hover:shadow-2xl hover:dark:bg-neutral-700"
+    class="min-w-fit overflow-hidden rounded-lg bg-white dark:bg-twitch-dark hover:bg-slate-100 hover:dark:bg-neutral-800 border dark:border-neutral-600 transition-colors duration-300 ease-in-out"
   >
-    <div class="relative aspect-video bg-slate-100 dark:bg-neutral-900">
+    <div class="relative aspect-video bg-slate-100 dark:bg-neutral-800">
       <img
         :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${props.item.contentId}/thumbnails/thumbnail.jpg`"
         alt=""
       >
       <div
-        class="absolute bottom-2 right-2 flex h-7 w-12 items-center justify-center rounded-lg bg-black/20 text-sm text-white backdrop-blur-sm"
+        class="absolute bottom-2 right-2 flex h-6 w-11 items-center justify-center rounded-lg bg-twitch-dark/60 text-sm text-white backdrop-blur-md"
       >
         {{
           props.item.clipDuration > 59
@@ -48,17 +48,17 @@ const props = defineProps<{
         }}
       </div>
     </div>
-    <div class="p-4">
+    <div class="border-t dark:border-neutral-600 p-4 text-black  dark:text-slate-200">
       <div class="line-clamp-1 text-xl font-semibold">
         {{ props.item.contentName }}
       </div>
       <div class="mb-3">
         {{ props.item.gameName }}
       </div>
-      <div style="overflow-wrap: anywhere">
+      <div style="overflow-wrap: anywhere;">
         {{ props.item.creatorName }}
       </div>
-      <div style="overflow-wrap: anywhere">
+      <div style="overflow-wrap: anywhere;">
         {{ dayjs().locale("ko").to(dayjs(props.item.clipCreatedAt)) }}
       </div>
     </div>

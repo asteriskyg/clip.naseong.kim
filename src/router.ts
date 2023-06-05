@@ -13,8 +13,8 @@ const routes: RouteRecordRaw[] = [
     component: async () => await import('./extensionIndex.vue'),
   },
   {
-    path: '/youtube',
-    component: async () => await import('./youtubeClip.vue'),
+    path: '/import',
+    component: async () => await import('./importClip.vue'),
   },
   {
     path: '/authorization',
@@ -27,6 +27,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/profile/:id',
     component: async () => await import('./common/userProfile.vue'),
+  },
+  {
+    path: '/live',
+    component: async () => await import('./LiveStream.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

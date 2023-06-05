@@ -59,7 +59,7 @@ const more = async () => {
 };
 </script>
 <template>
-  <div class="mb-4 text-2xl font-bold">
+  <div class="mb-4 text-2xl text-black dark:text-slate-200">
     {{ props.title }}
   </div>
   <div v-if="recentClipLists">
@@ -75,7 +75,7 @@ const more = async () => {
       class="mt-6 flex w-full items-center justify-center"
     >
       <button
-        class="rounded-full bg-slate-200 dark:bg-neutral-700 px-6 py-3 transition-colors duration-300 hover:text-white active:bg-blue-500 hover:bg-blue-500 hover:dark:bg-blue-900"
+        class="px-6 py-3 rounded-full bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 active:bg-blue-500 text-black dark:text-slate-200 transition-colors duration-300 ease-in-out"
         @click="more"
       >
         더보기
@@ -84,10 +84,14 @@ const more = async () => {
   </div>
   <div v-else>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 animate-pulse">
-      <div class="min-w-fit overflow-hidden rounded-lg border bg-white dark:border-neutral-600 dark:bg-neutral-800">
-        <div class="aspect-video bg-slate-100 dark:bg-neutral-900" />
+      <div
+        v-for="items in 12"
+        :key="items"
+        class="min-w-fit overflow-hidden rounded-lg border bg-white dark:border-neutral-600 dark:bg-twitch-dark"
+      >
+        <div class="aspect-video bg-slate-100 dark:bg-neutral-800" />
         <div class="flex flex-col p-4">
-          <span class="text-xl font-semibold">클립 로딩 중...</span>
+          <span class="text-xl text-black dark:text-slate-200">클립 로딩 중...</span>
         </div>
       </div>
     </div>
