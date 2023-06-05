@@ -5,10 +5,7 @@ import RecentClipList from './components/RecentClipList.vue';
 </script>
 <template>
   <div class="mx-auto w-full max-w-7xl p-6 lg:mt-6">
-    <div class="mb-4 text-2xl text-black dark:text-slate-200">
-      유용한 정보
-    </div>
-    <IndexTopWidget />
+    <IndexTopWidget class="scrollbar-none" />
     <RecentClipList
       :title="'최근 클립'"
       :get="'recent'"

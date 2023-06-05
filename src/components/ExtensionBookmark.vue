@@ -2,7 +2,7 @@
 import ExtensionLinkCard from './ExtensionLinkCard.vue';
 </script>
 <template>
-  <div class="mt-8 mb-1 text-lg font-bold">
+  <div class="mb-1 text-lg text-black dark:text-slate-200">
     바로가기
   </div>
   <div class="flex gap-3">
@@ -19,7 +19,7 @@ import ExtensionLinkCard from './ExtensionLinkCard.vue';
       href="https://tgd.kr/s/naseongkim"
     />
   </div>
-  <div class="mt-4 mb-1 text-lg font-bold">
+  <div class="mt-4 mb-1 text-lg text-black dark:text-slate-200">
     유튜브
   </div>
   <div class="mb-3 flex gap-3">
@@ -43,9 +43,9 @@ import ExtensionLinkCard from './ExtensionLinkCard.vue';
       icon="fast-forward"
       href="https://www.youtube.com/channel/UCfLvxrf3KoKpUG0bBHIZJ-g"
     />
-    <div class="h-32 w-1/2 rounded-3xl bg-slate-100" />
+    <div class="h-32 w-1/2 rounded-3xl bg-slate-100 dark:bg-neutral-800" />
   </div>
-  <div class="mt-4 mb-1 text-lg font-bold">
+  <div class="mt-4 mb-1 text-lg text-black dark:text-slate-200">
     다른 링크
   </div>
   <div class="mb-3 flex gap-3">

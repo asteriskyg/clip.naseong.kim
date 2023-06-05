@@ -69,13 +69,13 @@ const updateInput = (event: Event) => {
 <template>
   <div>
     <ExtensionHeader />
-    <ExtensionAd />
-    <div class="m-auto max-w-sm p-5">
+    <div class="flex flex-col m-auto max-w-sm p-6">
       <a
         href="/extension"
         target="_self"
-        class="flex mb-3 font-semibold hover:underline underline-offset-4 hover:text-blue-500"
+        class="flex mb-3 font-semibold hover:underline underline-offset-4 text-dark dark:text-slate-200 hover:text-blue-500 dark:hover:text-blue-400"
       >← 돌아가기</a>
+      <ExtensionAd class="mb-6" />
       <ExCard
         v-if="status === 'await'"
         icon="twitch"
@@ -88,14 +88,14 @@ const updateInput = (event: Event) => {
           click: fetchClip,
         }"
       >
-        <div class="overflow-hidden text-lg">
+        <div class="overflow-hidden text-lg text-black dark:text-slate-200 mb-6">
           긴나성, 딥나성 클립만 가져올 수 있어요.
         </div>
         <input
           placeholder="https://www.youtube.com/clip/xxxxx"
           :value="url"
           type="text"
-          class="w-full rounded-2xl border-white p-4"
+          class="w-full rounded-2xl border dark:border-neutral-600 p-4 bg-slate-100 dark:bg-neutral-700"
           @input="updateInput"
         >
       </ExCard>
@@ -138,7 +138,7 @@ const updateInput = (event: Event) => {
           click: fetchClip,
         }"
       >
-        <div class="overflow-hidden text-lg">
+        <div class="overflow-hidden text-lg text-black dark:text-slate-200 mb-6">
           {{ validate.description }}
         </div>
         <input
@@ -182,7 +182,7 @@ const updateInput = (event: Event) => {
       <a
         href="https://support.google.com/youtube/answer/10332730?hl=ko"
         target="_blank"
-        class="flex justify-center mt-3 transition-all duration-300 text-slate-600 font-semibold underline underline-offset-4 hover:text-blue-500"
+        class="flex justify-center mt-3 text-slate-500 dark:text-neutral-500 font-semibold underline underline-offset-4 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-300 ease-in-out"
       >유튜브에도 클립이 있어요?</a>
     </div>
   </div>
