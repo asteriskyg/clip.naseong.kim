@@ -63,7 +63,7 @@ const more = async () => {
     {{ props.title }}
   </div>
   <div v-if="recentClipLists">
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 4xl:grid-cols-5">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       <ClipItem
         v-for="item in recentClipLists"
         :key="item.contentId"
@@ -80,6 +80,16 @@ const more = async () => {
       >
         더보기
       </button>
+    </div>
+  </div>
+  <div v-else>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 animate-pulse">
+      <div class="min-w-fit overflow-hidden rounded-lg border bg-white dark:border-neutral-600 dark:bg-neutral-800">
+        <div class="aspect-video bg-slate-100 dark:bg-neutral-900" />
+        <div class="flex flex-col p-4">
+          <span class="text-xl font-semibold">클립 로딩 중...</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
