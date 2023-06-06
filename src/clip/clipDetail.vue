@@ -210,7 +210,7 @@ const deleteClip = async () => {
     >
       <div class="sm:p-6 sm:pb-0">
         <div
-          v-if="clip && fetch?.status !== 'ready'"
+          v-if="clip && !edit"
           class="sm:overflow-hidden sm:rounded-lg border-b sm:border md:rounded-2xl dark:border-neutral-600"
           style="position: relative; padding-top: 56.25%"
         >
@@ -384,21 +384,21 @@ const deleteClip = async () => {
         </div>
         <div class="flex shrink-0 gap-3">
           <button
-            v-if="!fetch && clip.creatorId === me?.twitchUserId"
+            v-if="!edit && clip.creatorId === me?.twitchUserId"
             class="sm:text-md transiton-all h-11 rounded-2xl bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 px-4 text-sm text-black dark:text-slate-200 duration-300 md:h-12 md:px-5 md:hover:bg-slate-200"
             @click="download('edit')"
           >
             수정
           </button>
           <button
-            v-if="!fetch && me && me?.userType !== 'viewer'"
+            v-if="!edit && me && me?.userType !== 'viewer'"
             class="sm:text-md transiton-all h-11 rounded-2xl bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 px-4 text-sm text-black dark:text-slate-200 duration-300 md:h-12 md:px-5 md:hover:bg-slate-200"
             @click="download('download')"
           >
             다운로드
           </button>
           <button
-            v-if="!fetch && clip.creatorId === me?.twitchUserId || !fetch && me?.userType && me?.userType !== 'viewer'"
+            v-if="!edit && clip.creatorId === me?.twitchUserId || !edit && me?.userType && me?.userType !== 'viewer'"
             class="sm:text-md transiton-all h-11 rounded-2xl bg-red-500 dark:bg-red-800/50 dark:hover:bg-red-800 px-4 text-sm text-white duration-300 md:h-12 md:px-5 md:hover:bg-red-600"
             @click="modal = !modal"
           >
