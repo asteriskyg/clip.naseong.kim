@@ -95,14 +95,14 @@ const deleteBg = async () => {
   await axios
     .post(`${VITE_API_URL}/user/update`, {
       data: {
-        profileBackgroundUrl: undefined,
+        profileBackgroundUrl: '',
       },
     })
     .catch(async function() {
       await auth.refreshAuthority();
       return await axios.post(`${VITE_API_URL}/user/update`, {
         data: {
-          profileBackgroundUrl: undefined,
+          profileBackgroundUrl: '',
         },
       });
     });
@@ -173,7 +173,7 @@ const deleteBg = async () => {
         </button>
         <Dialog
           :open="modal"
-          class="fixed top-1/2 left-1/2 z-10 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black/30 backdrop-blur-sm"
+          class="fixed top-1/2 left-1/2 z-30 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black/30 backdrop-blur-sm"
           @close="modal = !modal"
         >
           <DialogPanel
@@ -193,19 +193,19 @@ const deleteBg = async () => {
             >
             <div class="flex justify-end gap-3">
               <button
-                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-colors duration-300 ease-in-out"
                 @click="deleteBg"
               >
                 기본값으로 되돌리기
               </button>
               <button
-                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-all duration-300 md:hover:shadow-lg md:hover:shadow-slate-300"
+                class="rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 px-4 py-3 transition-colors duration-300 ease-in-out"
                 @click="modal = !modal"
               >
                 취소
               </button>
               <button
-                class="rounded-2xl bg-blue-500 dark:bg-blue-800 dark:hover:bg-blue-700 px-4 py-3 text-white transition-all duration-300 md:hover:shadow-lg md:hover:shadow-blue-600"
+                class="rounded-2xl bg-blue-500 hover:bg-blue-600 dark:bg-blue-800 dark:hover:bg-blue-700 px-4 py-3 text-white transition-colors duration-300 ease-in-out"
                 @click="uploadBg"
               >
                 변경
@@ -219,7 +219,7 @@ const deleteBg = async () => {
       >
         <div class="h-6 w-full">
           <img
-            v-if="user?.profileBackgroundUrl"
+            v-if="user?.profileImageUrl"
             class="h-20 w-20 -translate-y-1/2 overflow-hidden rounded-full border dark:border-neutral-600 bg-white dark:bg-neutral-800 sm:h-24 sm:w-24"
             :src="user.profileImageUrl"
             alt=""
