@@ -4,9 +4,11 @@ import { useAuthStore } from '../../../stores/auth';
 import axios from 'axios';
 import { useAuth } from '../../../plugins/useAuth';
 import ToggleDark from '../../ToggleDark.vue';
+import { useRoute } from 'vue-router';
 const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
+const route = useRoute();
 const auth = useAuth();
 const store = useAuthStore();
 const loginStatus = ref(true);
@@ -15,7 +17,7 @@ const modal = ref(false);
 const status = ref('loading');
 
 onMounted(async () => {
-  window.postMessage({ status: 'online' }, VITE_HOST_URL);
+  // const asdf = window.postMessage({ status: 'online' }, VITE_HOST_URL);
   me.value = await store.whoami();
 
   if (!me.value) {
@@ -33,7 +35,7 @@ async function logout() {
     });
 
   localStorage.removeItem('me');
-  window.location.href = '/';
+  window.location.href = route.path;
 }
 </script>
 <template>
@@ -42,7 +44,7 @@ async function logout() {
       <div class="flex items-center justify-between">
         <div class="flex items-center text-2xl">
           <a
-            href="/"
+            :href="route.path === '/get' ? '/' : route.path === 'extension' ? '/extension' : route.path"
             class="text-2xl text-black dark:text-slate-200"
           >na.<b>clip</b></a>
         </div>

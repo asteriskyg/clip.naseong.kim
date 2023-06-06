@@ -38,7 +38,7 @@ async function logout() {
     });
 
   localStorage.removeItem('me');
-  window.location.href = '/';
+  window.location.href = route.path;
 }
 </script>
 <template>

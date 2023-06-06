@@ -70,11 +70,12 @@ const updateInput = (event: Event) => {
   <div>
     <ExtensionHeader />
     <div class="flex flex-col m-auto max-w-sm p-6">
-      <a
-        href="/extension"
-        target="_self"
+      <button
         class="flex mb-3 font-semibold hover:underline underline-offset-4 text-dark dark:text-slate-200 hover:text-blue-500 dark:hover:text-blue-400"
-      >← 돌아가기</a>
+        @click="$router.back()"
+      >
+        ← 돌아가기
+      </button>
       <ExtensionAd class="mb-6" />
       <ExCard
         v-if="status === 'await'"
@@ -95,7 +96,7 @@ const updateInput = (event: Event) => {
           placeholder="https://www.youtube.com/clip/xxxxx"
           :value="url"
           type="text"
-          class="w-full rounded-2xl border dark:border-neutral-600 p-4 bg-slate-100 dark:bg-neutral-700"
+          class="w-full rounded-2xl border border-transparent p-4 bg-slate-200 dark:bg-neutral-700"
           @input="updateInput"
         >
       </ExCard>
