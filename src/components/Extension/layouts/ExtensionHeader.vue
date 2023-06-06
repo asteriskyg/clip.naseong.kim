@@ -17,7 +17,7 @@ const modal = ref(false);
 const status = ref('loading');
 
 onMounted(async () => {
-  // const asdf = window.postMessage({ status: 'online' }, VITE_HOST_URL);
+  // window.postMessage({ status: 'online' }, VITE_HOST_URL);
   me.value = await store.whoami();
 
   if (!me.value) {
