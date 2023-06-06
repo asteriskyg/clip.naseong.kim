@@ -24,6 +24,7 @@ const props = defineProps({
         text: undefined,
         href: undefined,
         click: undefined,
+        target: '_blank',
       };
     },
   },
@@ -99,7 +100,7 @@ const btnColor = computed(() => {
     </button>
     <a
       v-if="props.button.active && props.button.type === 'link'"
-      target="_blank"
+      :target="props.button.target"
       class="mt-5 cursor-pointer rounded-3xl p-4 text-center text-base no-underline transition-all duration-300"
       :class="btnColor"
       :href="props.button.href"

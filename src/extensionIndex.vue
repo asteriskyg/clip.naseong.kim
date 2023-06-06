@@ -25,6 +25,7 @@ onMounted(async () => {
         type: 'link',
         text: '바로가기',
         href: '/import',
+        target: '_self'
       }"
       :color="{
         bg: 'slate',
