@@ -19,20 +19,20 @@ const hide = () => {
     class="flex-col rounded-3xl hidden selection:items-center bg-slate-200 dark:bg-neutral-800 p-6"
     :class="{'md:flex': banner}"
   >
-    <span class="icon xi-lightbulb-o" />
-    <div class="mb-6 overflow-hidden text-xl line-clamp-2">
+    <span class="icon xi-lightbulb-o text-black dark:text-slate-200" />
+    <div class="mb-6 overflow-hidden text-xl line-clamp-2 text-black dark:text-slate-200">
       나클립 확장 프로그램으로 더욱 편리하게 이용해 보세요.
     </div>
     <div class="flex w-full gap-3 text-sm">
       <a
         target="_blank"
         href="https://chrome.google.com/webstore/detail/pccdeccoompikgkmcepmnmlggefjilfm"
-        class="w-1/2 text-center rounded-2xl bg-blue-500 p-4 text-white transition-colors hover:bg-blue-600"
+        class="w-1/2 text-center rounded-2xl bg-blue-500 dark:bg-blue-800/50 dark:hover:bg-blue-800 p-4 text-white transition-colors hover:bg-blue-600"
       >
         다운로드
       </a>
       <button
-        class="w-1/2 text-center rounded-2xl bg-slate-300 p-4 text-slate-500 transition-colors hover:bg-slate-400 hover:text-white"
+        class="w-1/2 text-center rounded-2xl bg-slate-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:text-slate-200 p-4 text-slate-500 hover:text-white transition-colors hover:bg-slate-400"
         @click="hide"
       >
         7일간 보지 않기
