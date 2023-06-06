@@ -25,7 +25,7 @@ onMounted(async () => {
       }"
     >
       <span
-        class="line-clamp-2 text-xl text-white dark:text-slate-200"
+        class="line-clamp-2 text-xl text-black dark:text-slate-200"
       >
         {{
           streamInfo?.status === "online"

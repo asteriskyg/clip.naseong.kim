@@ -21,7 +21,7 @@ onMounted(async () => {
 <template>
   <div class="mx-auto w-full max-w-7xl p-6 text-2xl text-black dark:text-slate-200">
     <svg
-      class="animate-spin h-8 w-8 text-white mb-3"
+      class="animate-spin h-8 w-8 text-black dark:text-slate-200 mb-3"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
