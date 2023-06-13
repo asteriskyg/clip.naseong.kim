@@ -11,6 +11,7 @@ import RecentClipList from './components/RecentClipList.vue';
 import CreateClip from './components/CreateClip.vue';
 dayjs.extend(relativeTime);
 
+const VITE_HOST = import.meta.env.VITE_HOST;
 const store = useAuthStore();
 const streamInfo = ref<typeof store.streamInfo>();
 const banner = ref(true);
@@ -22,14 +23,14 @@ const clipPopup = ref(false);
 onMounted(async () => {
   streamInfo.value = await store.getStreamInfo();
   useDark().value
-    ? chatPopout.value = 'https://www.twitch.tv/embed/naseongkim/chat?darkpopout&parent=dev.naseong.kim'
-    : chatPopout.value = 'https://www.twitch.tv/embed/naseongkim/chat?parent=dev.naseong.kim';
+    ? chatPopout.value = `https://www.twitch.tv/embed/naseongkim/chat?darkpopout&parent=${VITE_HOST}`
+    : chatPopout.value = `https://www.twitch.tv/embed/naseongkim/chat?parent=${VITE_HOST}`;
 });
 
 watch(useDark(), (newVal) => {
   newVal
-    ? chatPopout.value = 'https://www.twitch.tv/embed/naseongkim/chat?darkpopout&parent=dev.naseong.kim'
-    : chatPopout.value = 'https://www.twitch.tv/embed/naseongkim/chat?parent=dev.naseong.kim';
+    ? chatPopout.value = `https://www.twitch.tv/embed/naseongkim/chat?darkpopout&parent=${VITE_HOST}`
+    : chatPopout.value = `https://www.twitch.tv/embed/naseongkim/chat?parent=${VITE_HOST}`;
 });
 </script>
 <template>
