@@ -18,10 +18,10 @@ onMounted(async () => {
       v-if="streamInfo?.status !== 'offline' && streamInfo?.status !== 'unknown'"
       href="/live"
       target="_blank"
-      class="flex flex-col justify-between snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] dark:bg-neutral-800 rounded-3xl p-6"
+      class="flex flex-col justify-between snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] rounded-3xl p-6 transition-colors duration-300 ease-in-out"
       :class="{
-        'bg-blue-50': streamInfo?.status === 'online',
-        'bg-slate-100': streamInfo?.status !== 'online',
+        'bg-blue-200 hover:bg-blue-300 dark:bg-blue-800 dark:hover:bg-blue-700': streamInfo?.status === 'online',
+        'bg-slate-100 dark:bg-neutral-800': streamInfo?.status !== 'online',
       }"
     >
       <span
@@ -34,10 +34,10 @@ onMounted(async () => {
         }}
       </span>
       <div v-if="streamInfo?.status === 'online'">
-        <div class="line-clamp-1">
+        <div class="line-clamp-1 text-black dark:text-slate-200">
           {{ streamInfo?.game_name }}
         </div>
-        <div>{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</div>
+        <div class="text-black dark:text-slate-200">{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</div>
       </div>
     </a>
     <div

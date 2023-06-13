@@ -99,11 +99,11 @@ const fetchStream = async () => {
       btn: 'blue'
     }"
   >
-    {{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}
+    <span class="text-black dark:text-slate-200">{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</span>
     <a
       href="/live"
       target="_blank"
-      class="mt-4 -mb-1 w-full text-center text-slate-600 dark:text-neutral-300 font-semibold underline underline-offset-4 hover:text-blue-500 dark:hover:text-blue-500"
+      class="mt-4 -mb-1 w-full text-center text-slate-500 dark:text-neutral-300 font-semibold underline underline-offset-4 hover:text-blue-500 dark:hover:text-blue-500"
     >방송 보러가기</a>
   </ExCard>
   <ExCard
@@ -122,7 +122,7 @@ const fetchStream = async () => {
       btn: 'purple',
     }"
   >
-    {{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}
+    <span class="text-black dark:text-slate-200">{{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}</span>
     <a
       href="https://twitch.tv/naseongkim"
       target="_blank"

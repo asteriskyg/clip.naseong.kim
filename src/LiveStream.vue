@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useAuthStore } from './stores/auth';
 import { useDark } from '@vueuse/core';
 import dayjs from 'dayjs';
@@ -10,8 +10,6 @@ import Footer from './components/layouts/FooterLayout.vue';
 import RecentClipList from './components/RecentClipList.vue';
 import CreateClip from './components/CreateClip.vue';
 dayjs.extend(relativeTime);
-
-const VITE_HOST_URL = import.meta.env.VITE_HOST_URL;
 
 const store = useAuthStore();
 const streamInfo = ref<typeof store.streamInfo>();
@@ -62,7 +60,7 @@ watch(useDark(), (newVal) => {
         }"
       >
         <iframe
-          src="https://player.twitch.tv/?channel=naseongkim&parent=dev.naseong.kim&darkpopout"
+          src="https://player.twitch.tv/?channel=naseongkim&parent=naseong.kim&darkpopout"
           frameborder="0"
           width="100%"
           height="100%"
@@ -79,13 +77,13 @@ watch(useDark(), (newVal) => {
           v-if="streamInfo && streamInfo?.status !== 'offline'"
           class="relative z-10 flex flex-col p-4 lg:p-6 border-b bg-white dark:bg-twitch-dark dark:border-neutral-600"
         >
-          <div class="text-xl lg:text-2xl mb-1 lg:mb-0 line-clamp-1">
+          <div class="text-xl lg:text-2xl mb-1 lg:mb-0 line-clamp-1 text-black dark:text-slate-200">
             {{ streamInfo.title }}
           </div>
-          <div class="lg:text-lg lg:mb-2 line-clamp-1">
+          <div class="lg:text-lg lg:mb-2 line-clamp-1 text-black dark:text-slate-200">
             {{ streamInfo.game_name }}
           </div>
-          <div class="hidden lg:block text-base">
+          <div class="hidden lg:block text-base text-black dark:text-slate-200">
             {{ dayjs().locale("ko").to(dayjs(streamInfo?.started_at)) }}
           </div>
         </div>
