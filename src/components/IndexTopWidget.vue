@@ -66,7 +66,6 @@ onMounted(async () => {
       </div>
     </div>
     <a
-      target="_blank"
       href="/import"
       class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-red-50 hover:bg-red-100 dark:bg-red-900/50 hover:dark:bg-red-900"
     >

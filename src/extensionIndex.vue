@@ -25,6 +25,25 @@ import CreateClip from './components/CreateClip.vue';
         btn: 'red'
       }"
     />
+    <ExCard
+      icon="help-o"
+      title="사용하는데 문제가 있나요?"
+      :button="{
+        active: true,
+        type: 'link',
+        text: '버그 제보하기',
+        href: 'https://naseongkim.channel.io',
+        target: '_blank'
+      }"
+      :color="{
+        bg: 'slate',
+        btn: 'purple'
+      }"
+    >
+      <div class="overflow-hidden text-lg text-black dark:text-slate-200 mb-6">
+        내용을 알려주시면 빠르게 해결해드릴게요.
+      </div>
+    </ExCard>
     <div>
       <ExtensionBookmark />
     </div>

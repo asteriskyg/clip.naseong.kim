@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ExtensionLinkCard from './ExtensionLinkCard.vue';
+
 </script>
 <template>
   <div class="mb-1 text-lg text-black dark:text-slate-200">
