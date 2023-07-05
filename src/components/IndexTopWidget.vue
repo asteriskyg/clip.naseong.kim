@@ -66,21 +66,21 @@ onMounted(async () => {
       </div>
     </div>
     <a
+      href="/get"
+      class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-green-50 hover:bg-green-100 dark:bg-green-900/50 hover:dark:bg-green-900"
+    >
+      <span class="icon xi-x xi-file-video-o mt-1 mb-6 text-dark dark:text-slate-200" />
+      <div class="text-xl text-dark dark:text-slate-200">
+        새로운 클립<br>만들기 →
+      </div>
+    </a>
+    <a
       href="/import"
       class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-red-50 hover:bg-red-100 dark:bg-red-900/50 hover:dark:bg-red-900"
     >
       <span class="icon xi-x xi-file-video-o mt-1 mb-6 text-dark dark:text-slate-200" />
       <div class="text-xl text-dark dark:text-slate-200">
         유튜브 다시보기에서<br>클립을 만들어 보세요 →
-      </div>
-    </a>
-    <a
-      target="_blank"
-      class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-emerald-50 dark:bg-emerald-900/50 select-none cursor-not-allowed"
-    >
-      <span class="icon xi-x xi-bell-o mt-1 mb-6 text-dark dark:text-slate-200" />
-      <div class="text-xl text-dark dark:text-slate-200">
-        나클립 공지사항<br>(준비중)
       </div>
     </a>
     <a
