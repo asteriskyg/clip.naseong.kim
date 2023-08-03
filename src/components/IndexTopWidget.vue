@@ -69,9 +69,19 @@ onMounted(async () => {
       href="/get"
       class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-green-50 hover:bg-green-100 dark:bg-green-900/50 hover:dark:bg-green-900"
     >
-      <span class="icon xi-x xi-file-video-o mt-1 mb-6 text-dark dark:text-slate-200" />
+      <span class="icon xi-x xi-scissors mt-1 mb-6 text-dark dark:text-slate-200" />
       <div class="text-xl text-dark dark:text-slate-200">
         새로운 클립<br>만들기 →
+      </div>
+    </a>
+    <a
+      traget="_blank"
+      href="https://next.naseong.kim"
+      class="snap-always shrink-0 snap-start w-full max-w-[280px] sm:max-w-[304px] h-44 flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 ease-in-out bg-black/10 hover:bg-black/20 dark:bg-neutral-950 hover:dark:bg-neutral-950/50"
+    >
+      <span class="icon xi-x xi-external-link mt-1 mb-6 text-dark dark:text-slate-200" />
+      <div class="text-xl text-dark dark:text-slate-200">
+        완전히 새롭게,<br>다시 만드는 나클립 →
       </div>
     </a>
     <a

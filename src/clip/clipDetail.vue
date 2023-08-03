@@ -216,7 +216,7 @@ const deleteClip = async () => {
         >
           <iframe
             :src="`https://customer-lsoi5zwkd51of53g.cloudflarestream.com/${clip.contentId}/iframe?preload=true&loop=true&poster=https%3A%2F%2Fcustomer-lsoi5zwkd51of53g.cloudflarestream.com%2F${clip.contentId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`"
-            style=" border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowfullscreen="true"
           />
@@ -367,13 +367,13 @@ const deleteClip = async () => {
             {{ clip.gameName }}
           </div>
           <div>
-            <span class="text-gray-400">방송일자: </span>
+            <span class="text-gray-500">방송일자: </span>
             {{ dayjs(clip.streamStartedAt).format("YYYY년 MM월 DD일") }} ({{
               dayjs().locale("ko").to(dayjs(clip.streamStartedAt))
             }})
           </div>
           <div v-if="clip.gameId !== 999">
-            <span class="text-gray-400">타임스탬프: </span>
+            <span class="text-gray-500">타임스탬프: </span>
             {{ timestamp }}
           </div>
           <a
