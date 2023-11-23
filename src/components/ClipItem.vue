@@ -27,7 +27,7 @@ const props = defineProps<{
 <template>
   <a
     :href="`/detail/${props.item.clipName}`"
-    class="min-w-fit overflow-hidden rounded-lg bg-white dark:bg-twitch-dark hover:bg-slate-100 hover:dark:bg-neutral-800 border dark:border-neutral-600 transition-colors duration-300 ease-in-out"
+    class="inline-flex w-full flex-col divide-y divide-gray-200 overflow-hidden rounded-lg border bg-white transition-colors duration-300 ease-in-out hover:bg-slate-100 dark:divide-neutral-600 dark:border-neutral-600 dark:bg-twitch-dark hover:dark:bg-neutral-800"
   >
     <div class="relative aspect-video bg-slate-100 dark:bg-neutral-800">
       <img
@@ -48,17 +48,17 @@ const props = defineProps<{
         }}
       </div>
     </div>
-    <div class="border-t dark:border-neutral-600 p-4 text-black  dark:text-slate-200">
+    <div class="px-4 py-4 text-black dark:text-slate-200 sm:px-6">
       <div class="line-clamp-1 text-xl font-semibold">
         {{ props.item.contentName }}
       </div>
       <div class="mb-3">
         {{ props.item.gameName }}
       </div>
-      <div style="overflow-wrap: anywhere;">
+      <div style="overflow-wrap: anywhere">
         {{ props.item.creatorName }}
       </div>
-      <div style="overflow-wrap: anywhere;">
+      <div style="overflow-wrap: anywhere">
         {{ dayjs().locale("ko").to(dayjs(props.item.clipCreatedAt)) }}
       </div>
     </div>

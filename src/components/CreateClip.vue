@@ -115,6 +115,7 @@ const fetchStream = async () => {
       active: true,
       type: 'link',
       text: '로그인 하고 클립 만들기',
+      target: '_blank',
       href: `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=0373yf8vzqpo4f9ln4ajqrq9fim3hd&redirect_uri=${VITE_HOST_URL}/authorization&scope=clips%3Aedit%20user%3Aread%3Aemail%20user%3Aread%3Asubscriptions`,
     }"
     :color="{

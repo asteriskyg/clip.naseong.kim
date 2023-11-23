@@ -159,7 +159,6 @@ const loop = () => {
 };
 
 const updateClip = async () => {
-  console.log(clip.value?.contentName, newClipName.value);
   if (clip.value?.contentName !== newClipName.value) {
     await axios
       .post(`${VITE_API_URL}/clip/edit?id=${clip.value?.clipName}`, {
